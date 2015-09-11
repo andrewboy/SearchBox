@@ -250,7 +250,7 @@
             }
             
             if( 'undefined' != typeof(settings.params) ){
-                getNode('searchItemSelector').children()
+                getNode('searchItemSelector')
                     .append( SearchBox.getTemplate('selectOptionsLayout',[{'cls':'', 'name':'', 'options':settings.params}] ) );
                 getNode('searchItemSelector').on('change', searchItemSelectorHandler);
                 getNode('form').attr('action', settings.url);
