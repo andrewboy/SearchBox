@@ -1,5 +1,5 @@
 {
-    "name": "andrewboy/SearchBox",
+    "name": "andrewboy/search-box",
     "description": "Laravel package for admin search box.",
     "keywords": ["laravel", "model", "search", "admin"],
     "authors": [
