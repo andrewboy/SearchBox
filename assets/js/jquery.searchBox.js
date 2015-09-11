@@ -243,7 +243,7 @@
         
         var init = function(){
             
-            if( 'undefined' == typeof(settings.params) && 'undefined' != window.searchBoxParams ){
+            if( 'undefined' === typeof(settings.params) && 'undefined' !== typeof(window.searchBoxParams) ){
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
                 settings.url = input.url;
