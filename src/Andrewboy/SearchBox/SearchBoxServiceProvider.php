@@ -43,6 +43,11 @@ class SearchBoxServiceProvider extends ServiceProvider {
             $this->publishes([
                 __DIR__.'/../../../resources/lang/' => base_path('resources/lang/vendor/search-box'),
             ]);
+            
+            #ASSETS
+            $this->publishes([
+                __DIR__.'/../../../assets/' => public_path('vendor/search-box'),
+            ], 'public');
 	}
 
 }
