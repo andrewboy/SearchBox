@@ -39,7 +39,7 @@ class SearchBoxServiceProvider extends ServiceProvider {
             $this->loadViewsFrom(__DIR__.'/../../../resources/views/searchBox/', 'searchbox');
             
             #TRANSLATIONS
-            $this->loadTranslationsFrom(__DIR__.'/../../../resources/lang/', 'searchbox');
+            $this->loadTranslationsFrom(__DIR__.'/../../../resources/lang/', 'search-box');
             $this->publishes([
                 __DIR__.'/../../../resources/lang/' => base_path('resources/lang/vendor/search-box'),
             ]);
