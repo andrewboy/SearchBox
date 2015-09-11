@@ -125,7 +125,7 @@
             if(params.type === 'list'){
 
                 xhtml += '<div class="form-group col-md-2">';
-                    xhtml += '<select name="'+ id +'[values][]" class="form-control input-block-level list-variables" size="1">';
+                    xhtml += '<select name="search['+ id +'][values][]" class="form-control input-block-level list-variables" size="1">';
 
                     for(var i in params.values){
                         xhtml += '<option value="'+ i +'">'+ params.values[i] +'</option>';
@@ -143,12 +143,12 @@
             } else{
 
                 xhtml += '<div class="form-group col-md-2">'+
-                        '<input type="text" value="" name="'+ id +'[values][]" placeholder="" class="form-control filter-value-1" '+ (params.type==='date' ? 'data-provide="datepicker" data-date-format="yyyy-mm-dd"' : '') +' />'+
+                        '<input type="text" value="" name=search["'+ id +'][values][]" placeholder="" class="form-control filter-value-1" '+ (params.type==='date' ? 'data-provide="datepicker" data-date-format="yyyy-mm-dd"' : '') +' />'+
                     '</div>';
 
                 if(['date', 'integer'].indexOf(params.type) > -1){
                     xhtml += '<div class="form-group col-md-2">'+
-                            '<input type="text" value="" name="'+ id +'[values][]" placeholder="" class="form-control filter-value-2" '+ (params.type==='date' ? 'data-provide="datepicker"  data-date-format="yyyy-mm-dd"' : '') +' />'+
+                            '<input type="text" value="" name="search['+ id +'][values][]" placeholder="" class="form-control filter-value-2" '+ (params.type==='date' ? 'data-provide="datepicker"  data-date-format="yyyy-mm-dd"' : '') +' />'+
                         '</div>';
                 }
 
@@ -161,7 +161,7 @@
         
         tpl.operatorListLayout = function(id, params){
             var xhtml = '<div class="form-group col-md-2">'+
-                '<select name="'+ id +'[operator]" class="form-control  input-block-level operators">';
+                '<select name="search['+ id +'][operator]" class="form-control  input-block-level operators">';
 
                     for(var i in SearchItem.operatorByType[params.type]){
                         xhtml += '<option value="'+ SearchItem.operatorByType[params.type][i] +'">'+ 
@@ -183,7 +183,7 @@
         
         tpl.checkboxLayout = function(id, params){
             return '<div class="form-group col-md-1 text-center">'+
-                '<input type="checkbox" class="icheck" name="'+ id +'[search]" value="1" />'+
+                '<input type="checkbox" class="icheck" name="search['+ id +'][search]" value="1" />'+
                 '</div>';
         };
         

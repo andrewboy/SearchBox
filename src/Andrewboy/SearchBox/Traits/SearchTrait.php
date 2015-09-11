@@ -129,12 +129,12 @@ trait SearchTrait
         $searchParams = [];
 
         foreach (static::$searchParams as $key => $searchParam) {
-            $searchParams["search.{$key}"] = $searchParam;
+            $searchParams[$key] = $searchParam;
             if ('list' === $searchParam['type']) {
                 $self = new self;
                 $relationClass = get_class($self->{$searchParam['relation'][0]}()->getRelated());
-                $searchParams["search.{$key}"]['values'] = $relationClass::lists($searchParam['relation'][1], 'id')->all();
-                unset($searchParams["search.{$key}"]['relation']);
+                $searchParams[$key]['values'] = $relationClass::lists($searchParam['relation'][1], 'id')->all();
+                unset($searchParams[$key]['relation']);
             }
         }
 
