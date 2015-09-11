@@ -30,7 +30,7 @@
     </form>
 
     <script type="text/javascript">
-        window.searchbox.searchParams = '{!! isset($searchParams) ? $searchParams : '' !!}';
+        window.searchBoxParams = '{!! isset($searchParams) ? $searchParams : '' !!}';
     </script>
     
 </div>
