@@ -7,37 +7,35 @@ trait SearchTrait
 
     public function scopeSearch($query, array $params)
     {
-        foreach ($params as $key => $values) {
+        if (isset($params['search'])) {
+            foreach ($params['search'] as $key => $values) {
 
-            if (!isset($values['search'])) {
-                continue;
-            }
+                $realKey = substr($key, 7);
 
-            $realKey = substr($key, 7);
+                if (false !== $realKey && in_array($realKey, array_keys(static::$searchParams))) {
 
-            if (false !== $realKey && in_array($realKey, array_keys(static::$searchParams))) {
+                    switch (static::$searchParams[$realKey]['type']) {
 
-                switch (static::$searchParams[$realKey]['type']) {
+                        case 'integer':
+                            $this->setIntegerSearchQuery($query, $realKey, $values);
+                            break;
 
-                    case 'integer':
-                        $this->setIntegerSearchQuery($query, $realKey, $values);
-                        break;
+                        case 'date':
+                            $this->setDateSearchQuery($query, $realKey, $values);
+                            break;
 
-                    case 'date':
-                        $this->setDateSearchQuery($query, $realKey, $values);
-                        break;
+                        case 'string':
+                            $this->setStringSearchQuery($query, $realKey, $values);
+                            break;
 
-                    case 'string':
-                        $this->setStringSearchQuery($query, $realKey, $values);
-                        break;
+                        case 'boolean':
+                            $this->setBooleanSearchQuery($query, $realKey, $values);
+                            break;
 
-                    case 'boolean':
-                        $this->setBooleanSearchQuery($query, $realKey, $values);
-                        break;
-
-                    case 'list':
-                        $this->setListSearchQuery($query, $realKey, $values);
-                        break;
+                        case 'list':
+                            $this->setListSearchQuery($query, $realKey, $values);
+                            break;
+                    }
                 }
             }
         }
