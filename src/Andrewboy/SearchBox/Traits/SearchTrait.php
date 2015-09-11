@@ -10,30 +10,28 @@ trait SearchTrait
         if (isset($params['search'])) {
             foreach ($params['search'] as $key => $values) {
 
-                $realKey = substr($key, 7);
+                if (false !== $key && in_array($key, array_keys(static::$searchParams))) {
 
-                if (false !== $realKey && in_array($realKey, array_keys(static::$searchParams))) {
-
-                    switch (static::$searchParams[$realKey]['type']) {
+                    switch (static::$searchParams[$key]['type']) {
 
                         case 'integer':
-                            $this->setIntegerSearchQuery($query, $realKey, $values);
+                            $this->setIntegerSearchQuery($query, $key, $values);
                             break;
 
                         case 'date':
-                            $this->setDateSearchQuery($query, $realKey, $values);
+                            $this->setDateSearchQuery($query, $key, $values);
                             break;
 
                         case 'string':
-                            $this->setStringSearchQuery($query, $realKey, $values);
+                            $this->setStringSearchQuery($query, $key, $values);
                             break;
 
                         case 'boolean':
-                            $this->setBooleanSearchQuery($query, $realKey, $values);
+                            $this->setBooleanSearchQuery($query, $key, $values);
                             break;
 
                         case 'list':
-                            $this->setListSearchQuery($query, $realKey, $values);
+                            $this->setListSearchQuery($query, $key, $values);
                             break;
                     }
                 }
