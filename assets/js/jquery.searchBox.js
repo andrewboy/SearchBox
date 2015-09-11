@@ -143,7 +143,7 @@
             } else{
 
                 xhtml += '<div class="form-group col-md-2">'+
-                        '<input type="text" value="" name=search['+ id +'][values][]" placeholder="" class="form-control filter-value-1" '+ (params.type==='date' ? 'data-provide="datepicker" data-date-format="yyyy-mm-dd"' : '') +' />'+
+                        '<input type="text" value="" name="search['+ id +'][values][]" placeholder="" class="form-control filter-value-1" '+ (params.type==='date' ? 'data-provide="datepicker" data-date-format="yyyy-mm-dd"' : '') +' />'+
                     '</div>';
 
                 if(['date', 'integer'].indexOf(params.type) > -1){
