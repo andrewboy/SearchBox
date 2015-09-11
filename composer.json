@@ -1,0 +1,21 @@
+{
+    "name": "andrewboy/SearchBox",
+    "description": "Laravel package for admin search box.",
+    "keywords": ["laravel", "model", "search", "admin"],
+    "authors": [
+        {
+            "name": "Beck András",
+            "email": "andras.jozsef.beck@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": ">5.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Andrewboy\\SearchBox": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
