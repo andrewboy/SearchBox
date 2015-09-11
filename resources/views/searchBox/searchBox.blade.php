@@ -29,4 +29,8 @@
         </div>
     </form>
 
+    <script type="text/javascript">
+        var searchParams = '{!! $searchParams || '' !!}';
+    </script>
+    
 </div>
