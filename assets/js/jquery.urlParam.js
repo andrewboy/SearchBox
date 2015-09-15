@@ -48,7 +48,7 @@
     $.hasParam = function(paramName){
         var params = $.getParams();
         
-        return "undefined" === typeof(params[paramName]);
+        return "undefined" !== typeof(params[paramName]);
     };
     
     $.getParam = function(paramName){
