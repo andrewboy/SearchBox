@@ -259,10 +259,27 @@
                     .append( SearchBox.getTemplate('selectOptionsLayout',[{'cls':'', 'name':'', 'options':settings.params}] ) );
                 getNode('searchItemSelector').on('change', searchItemSelectorHandler);
                 getNode('form').attr('action', settings.url);
+            
+                setInitialState();
             }
             
             if( settings.isJSON ){
                 getNode('form').submit(submitHandler);
+            }
+            
+        };
+        
+        var setInitialState = function(){
+            if($.hasParam('search')){
+                
+                var searchSettings = $.getParams('search');
+                
+                for( var id in searchSettings ){
+                    if(searchSettings[id].search > 0 && settings.params.indexOf(id) > -1){
+                        var item = new SearchItem(obj, id, settings.params[id]);
+                        item.setChecked(true);
+                    }
+                }
             }
             
         };
@@ -290,6 +307,7 @@
         this.addItem = function( item ){
             getNode('body').append(item.getElement());
             items[ item.getId() ] = item;
+            getNode('searchItemSelector').children('[name="'+ item.getId() +'"]').attr('disabled', true);
         };
         
         var submitHandler = function(e){
@@ -317,13 +335,10 @@
 
             var id = $target.val();
 
-            if("undefined" == typeof(items[id])){
+            if("undefined" === typeof(items[id])){
                 var item = new SearchItem(obj, id, settings.params[id]);
                 item.setChecked(true);
             }
-            
-            $target.children(':selected').attr('disabled', true);
-
         };
         
         init();
