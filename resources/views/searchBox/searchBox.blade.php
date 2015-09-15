@@ -1,4 +1,4 @@
-<div class="box searchbox">
+<div class="box collapsed-box searchbox">
 
     <div class="box-header">
         <h3 class="box-title">{{trans('search-box::search_box.title')}}</h3>

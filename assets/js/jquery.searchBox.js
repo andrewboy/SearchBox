@@ -243,6 +243,11 @@
         
         var init = function(){
             
+            if( $.hasParam('search') ){
+                getNode($el).removeClass('box-collapsed');
+                getNode('body').css('display','block');
+            }
+            
             if( 'undefined' === typeof(settings.params) && 'undefined' !== typeof(window.searchBoxParams) ){
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
