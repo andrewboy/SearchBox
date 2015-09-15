@@ -50,6 +50,17 @@
             return id;
         };
         
+        this.setOperator = function(operatorId){
+            getNode('operatorSelect').children('[value="'+ operatorId +'"]').click();
+        };
+        
+        this.setValues = function(values){
+            getNode('filterVal1').val(values[0]);
+            if(values.length > 1){
+                getNode('filterVal2').val(values[1]);
+            }
+        };
+        
         this.setVisible = function(isVisisble){
             if(isVisisble){
                 $el.removeClass('hidden');
@@ -281,6 +292,8 @@
                     if(searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1){
                         var item = new SearchItem(obj, id, settings.params[id]);
                         item.setChecked(true);
+                        item.setOperator(searchSettings[id].operator);
+                        item.setValues(searchSettings[id].values);
                     }
                 }
             };
