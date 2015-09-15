@@ -273,7 +273,7 @@
         var setInitialState = function(){
             if($.hasParam('search')){
                 
-                var searchSettings = $.getParams('search');
+                var searchSettings = $.getParam('search');
                 window.console.log('searchSettings: ', searchSettings);
                 
                 for( var id in searchSettings ){
