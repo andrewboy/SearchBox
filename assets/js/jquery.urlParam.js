@@ -1,6 +1,6 @@
 (function($){
     
-    $.fn.getParams = function(){
+    $.getParams = function(){
         var params = new Object;
         
         var setParam = function(params, paramIndexes, value){
@@ -45,14 +45,14 @@
         return params;
     };
     
-    $.fn.hasParam = function(paramName){
-        var params = $.fn.getParams();
+    $.hasParam = function(paramName){
+        var params = $.getParams();
         
         return "undefined" === typeof(params[paramName]);
     };
     
-    $.fn.getParam = function(paramName){
-        var params = $.fn.getParams();
+    $.getParam = function(paramName){
+        var params = $.getParams();
         
         return params[paramName] || null;
     };
