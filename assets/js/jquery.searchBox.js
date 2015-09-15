@@ -51,7 +51,8 @@
         };
         
         this.setOperator = function(operatorId){
-            getNode('operatorSelect').children('[value="'+ operatorId +'"]').click();
+            getNode('operatorSelect').children('[value="'+ operatorId +'"]')
+                    .prop('selected', 'selected').trigger('change');
         };
         
         this.setValues = function(values){
