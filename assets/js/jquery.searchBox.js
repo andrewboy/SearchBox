@@ -278,7 +278,7 @@
                 
                 for( var id in searchSettings ){
                     window.console.log(id);//settings.params.indexOf(id)
-                    if(searchSettings[id].search > 0 && Object.indexOf(settings.params).indexOf(id) > -1){
+                    if(searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1){
                         var item = new SearchItem(obj, id, settings.params[id]);
                         item.setChecked(true);
                     }
