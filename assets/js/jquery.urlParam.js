@@ -14,7 +14,11 @@
             if( paramIndexes.length > 0 ){
                 setParam(params[cleanedParam], paramIndexes, value);
             } else{
+                
                 if(realParam === '[]'){
+                    if(! (params instanceof Array) ){
+                        params = new Array;
+                    }
                     params.push(value);
                 } else{
                     params[cleanedParam] = value;
