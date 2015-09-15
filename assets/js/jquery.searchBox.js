@@ -244,7 +244,7 @@
         var init = function(){
             
             if( $.hasParam('search') ){
-                getNode($el).removeClass('box-collapsed');
+                $el.removeClass('box-collapsed');
                 getNode('body').css('display','block');
             }
             
