@@ -246,6 +246,7 @@
             if( $.hasParam('search') ){
                 $el.removeClass('collapsed-box');
                 getNode('body').css('display','block');
+                getNode('footer').css('display','block');
             }
             
             if( 'undefined' === typeof(settings.params) && 'undefined' !== typeof(window.searchBoxParams) ){
@@ -273,8 +274,10 @@
             if($.hasParam('search')){
                 
                 var searchSettings = $.getParams('search');
+                window.console.log('searchSettings: ', searchSettings);
                 
                 for( var id in searchSettings ){
+                    window.console.log(searchSettings[id].search, settings.params.indexOf(id));
                     if(searchSettings[id].search > 0 && settings.params.indexOf(id) > -1){
                         var item = new SearchItem(obj, id, settings.params[id]);
                         item.setChecked(true);
@@ -292,6 +295,10 @@
             switch(nodeId){
                 case 'body':
                     return $('.box-body', $el);
+                    
+                case 'footer':
+                    return $('.box-footer', $el);
+                    break;
                     
                 case 'searchItemSelector':
                     return $('select[name="searchbox-item-selector"]', $el);
