@@ -277,13 +277,13 @@
                 window.console.log('searchSettings: ', searchSettings);
                 
                 for( var id in searchSettings ){
-                    window.console.log(searchSettings[id].search, settings.params.indexOf(id));
-                    if(searchSettings[id].search > 0 && settings.params.indexOf(id) > -1){
+                    window.console.log(id);//settings.params.indexOf(id)
+                    if(searchSettings[id].search > 0 && Object.indexOf(settings.params).indexOf(id) > -1){
                         var item = new SearchItem(obj, id, settings.params[id]);
                         item.setChecked(true);
                     }
                 }
-            }
+            };
             
         };
         
