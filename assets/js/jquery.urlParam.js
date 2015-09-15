@@ -8,7 +8,8 @@
             var cleanedParam = realParam.match(/\[(.*?)\]/)[1];
             
             if( "undefined" === typeof(params[cleanedParam]) ){
-                params[cleanedParam] = new Object;
+//                params[cleanedParam] = new Object;
+                params[cleanedParam] = [];
             }
             
             if( paramIndexes.length > 0 ){
@@ -16,9 +17,9 @@
             } else{
                 
                 if(realParam === '[]'){
-                    if(! (params instanceof Array) ){
-                        params = new Array;
-                    }
+//                    if(! (params instanceof Array) ){
+//                        params = new Array;
+//                    }
                     params.push(value);
                 } else{
                     params[cleanedParam] = value;
