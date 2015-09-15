@@ -328,7 +328,7 @@
         this.addItem = function( item ){
             getNode('body').append(item.getElement());
             items[ item.getId() ] = item;
-            getNode('searchItemSelector').children('[name="'+ item.getId() +'"]').attr('disabled', true);
+            getNode('searchItemSelector').children('[value="'+ item.getId() +'"]').attr('disabled', true);
         };
         
         var submitHandler = function(e){
