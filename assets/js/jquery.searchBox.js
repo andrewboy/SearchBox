@@ -34,9 +34,6 @@
                 case 'listToggleBtn':
                     return $('.list-toggle', $el);
                     
-                case 'variableList':
-                    return $('.list-variables', $el);
-                    
                 case 'checkBox':
                     return $('input.icheck', $el);
             }
@@ -100,7 +97,7 @@
         };
         
         var toggleBtnHandler = function(e){
-            var $variablesList = getNode('variableList');
+            var $variablesList = getNode('filterVal1');
             if($variablesList.is("[multiple]")){
                 $variablesList.attr('size', 1).attr('multiple', false);
                 $(this).removeClass('btn-danger').addClass('btn-primary')
@@ -137,7 +134,7 @@
             if(params.type === 'list'){
 
                 xhtml += '<div class="form-group col-md-2">';
-                    xhtml += '<select name="search['+ id +'][values][]" class="form-control input-block-level list-variables" size="1">';
+                    xhtml += '<select name="search['+ id +'][values][]" class="form-control input-block-level filter-value-1" size="1">';
 
                     for(var i in params.values){
                         xhtml += '<option value="'+ i +'">'+ params.values[i] +'</option>';
