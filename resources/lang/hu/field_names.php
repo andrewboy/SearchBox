@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'banner'=>[
+    'App\Models\Banner'=>[
         'id' => 'azonosító',
         'name' => 'név',
         'url' => 'url',
