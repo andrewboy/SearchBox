@@ -140,8 +140,6 @@ trait SearchTrait
     {
         $searchParams = [];
         
-        dd(trans('search-box::operators'));
-
         foreach (static::$_searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
             if ('list' === $searchParam['type']) {
