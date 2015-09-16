@@ -140,6 +140,8 @@ trait SearchTrait
     {
         $searchParams = [];
         
+        dd(__CLASS__);
+        
         foreach (static::$_searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
             if ('list' === $searchParam['type']) {
