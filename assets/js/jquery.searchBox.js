@@ -189,7 +189,7 @@
         
         tpl.labelLayout = function(id, labels){
             return '<div class="form-group col-md-2">'+
-                '<label>'+ labels[ id ] +'</label>'+
+                '<label>'+ (labels[ id ] || id) +'</label>'+
             '</div>';
         };
         
@@ -349,7 +349,7 @@
             var xhtml = '';
             
             for(var i in params.options){
-                xhtml += '<option value="'+ i +'">'+ labels[i] +'</option>';
+                xhtml += '<option value="'+ i +'">'+ (labels[i] || i) +'</option>';
             }
 
             return xhtml;

@@ -7,9 +7,10 @@ trait SearchTrait
 
     public function scopeSearch($query, array $params)
     {
-        $this->extendSearch($query, $params);
-
         if (isset($params['search'])) {
+            
+            $this->extendSearch($query, $params['search']);
+
             foreach ($params['search'] as $key => $values) {
 
                 if (false !== $key 
@@ -44,7 +45,7 @@ trait SearchTrait
 
     protected function extendSearch($query, array &$params)
     {
-        
+        //
     }
 
     protected function setIntegerSearchQuery($query, $key, array $values)
