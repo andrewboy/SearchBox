@@ -140,6 +140,8 @@ trait SearchTrait
     {
         $searchParams = [];
         
+        dd(__CLASS__);
+        
         foreach (static::$_searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
             if ('list' === $searchParam['type']) {
@@ -159,8 +161,9 @@ trait SearchTrait
         return json_encode(
             [
             'url' => $url, 
-            'params' => $searchParams, 
-            'operators'=>trans('search-box::operators')
+            'params'    =>  $searchParams, 
+            'operators' =>  trans('search-box::operators'),
+            'fieldNames'=>  trans('search-box::field_names.'.__CLASS__)
             ]
         );
     }
