@@ -255,11 +255,11 @@
         
         var init = function(){
             
-            if( $.hasParam('search') ){
-                $el.removeClass('collapsed-box');
-                getNode('body').css('display','block');
-                getNode('footer').css('display','block');
-            }
+//            if( $.hasParam('search') ){
+//                $el.removeClass('collapsed-box');
+//                getNode('body').css('display','block');
+//                getNode('footer').css('display','block');
+//            }
             
             if( 'undefined' === typeof(settings.params) && 'undefined' !== typeof(window.searchBoxParams) ){
                 var input = JSON.parse(window.searchBoxParams);
@@ -267,7 +267,7 @@
                 settings.url = input.url;
             }
             
-            if( 'undefined' != typeof(settings.params) ){
+            if( 'undefined' !== typeof(settings.params) ){
                 getNode('searchItemSelector')
                     .append( SearchBox.getTemplate('selectOptionsLayout',[{'cls':'', 'name':'', 'options':settings.params}] ) );
                 getNode('searchItemSelector').on('change', searchItemSelectorHandler);
@@ -284,12 +284,13 @@
         
         var setInitialState = function(){
             if($.hasParam('search')){
+                $el.removeClass('collapsed-box');
+                getNode('body').css('display','block');
+                getNode('footer').css('display','block');
                 
                 var searchSettings = $.getParam('search');
-                window.console.log('searchSettings: ', searchSettings);
                 
                 for( var id in searchSettings ){
-                    window.console.log(id);//settings.params.indexOf(id)
                     if(searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1){
                         var item = new SearchItem(obj, id, settings.params[id]);
                         item.setChecked(true);
@@ -298,7 +299,6 @@
                     }
                 }
             };
-            
         };
         
         this.getItem = function(itemId){

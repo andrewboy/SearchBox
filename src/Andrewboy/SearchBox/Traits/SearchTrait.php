@@ -7,12 +7,15 @@ trait SearchTrait
 
     public function scopeSearch($query, array $params)
     {
+        $this->extendSearch($query, $params);
+
         if (isset($params['search'])) {
             foreach ($params['search'] as $key => $values) {
 
-                if (false !== $key && in_array($key, array_keys(static::$searchParams))) {
+                if (false !== $key 
+                        && in_array($key, array_keys(static::$_searchParams))) {
 
-                    switch (static::$searchParams[$key]['type']) {
+                    switch (static::$_searchParams[$key]['type']) {
 
                         case 'integer':
                             $this->setIntegerSearchQuery($query, $key, $values);
@@ -37,6 +40,11 @@ trait SearchTrait
                 }
             }
         }
+    }
+
+    protected function extendSearch($query, array &$params)
+    {
+        
     }
 
     protected function setIntegerSearchQuery($query, $key, array $values)
@@ -106,16 +114,24 @@ trait SearchTrait
         switch ($values['operator']) {
             case '=':
                 $ids = $values['values'];
-                $query->whereHas(static::$searchParams[$key]['relation'][0], function($q) use($ids) {
-                    $q->whereIn('id', $ids);
-                }, '>', 0);
+                $query->whereHas(
+                    static::$_searchParams[$key]['relation'][0], 
+                    function($q) use($ids) {
+                        $q->whereIn('id', $ids);
+                    },
+                    '>',
+                    0
+                );
                 break;
 
             case '!=':
                 $ids = $values['values'];
-                $query->whereHas(static::$searchParams[$key]['relation'][0], function($q) use($ids) {
-                    $q->whereNotIn('id', $ids);
-                });
+                $query->whereHas(
+                    static::$_searchParams[$key]['relation'][0], 
+                    function($q) use($ids) {
+                            $q->whereNotIn('id', $ids);
+                    }
+                );
                 break;
         }
     }
@@ -123,13 +139,21 @@ trait SearchTrait
     public static function getSearchSet($url)
     {
         $searchParams = [];
+        
+        dd(trans('search-box::search_box.title'));
 
-        foreach (static::$searchParams as $key => $searchParam) {
+        foreach (static::$_searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
             if ('list' === $searchParam['type']) {
                 $self = new self;
-                $relationClass = get_class($self->{$searchParam['relation'][0]}()->getRelated());
-                $searchParams[$key]['values'] = $relationClass::lists($searchParam['relation'][1], 'id')->all();
+                $relationClass = get_class(
+                    $self->{$searchParam['relation'][0]}()
+                    ->getRelated()
+                );
+                $searchParams[$key]['values'] = $relationClass::lists(
+                    $searchParam['relation'][1], 
+                    'id'
+                )->all();
                 unset($searchParams[$key]['relation']);
             }
         }
