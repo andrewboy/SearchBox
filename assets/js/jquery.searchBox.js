@@ -246,7 +246,7 @@
             
             if( 'undefined' !== typeof(settings.params) ){
                 getNode('searchItemSelector')
-                    .append( SearchBox.getTemplate('selectOptionsLayout',[{'cls':'', 'name':'', 'options':settings.params}] ) );
+                    .append( SearchBox.getTemplate('selectOptionsLayout',[{'cls':'', 'name':'', 'options':settings.params}, settings.itemLabels] ) );
                 getNode('searchItemSelector').on('change', searchItemSelectorHandler);
                 getNode('form').attr('action', settings.url);
             
@@ -345,11 +345,11 @@
     SearchBox.getTemplate = function(item, params){
         var tpl = {};
         
-        tpl.selectOptionsLayout = function(params){
+        tpl.selectOptionsLayout = function(params, labels){
             var xhtml = '';
             
             for(var i in params.options){
-                xhtml += '<option value="'+ i +'">'+ params.options[i].name +'</option>';
+                xhtml += '<option value="'+ i +'">'+ labels[i] +'</option>';
             }
 
             return xhtml;
