@@ -8,7 +8,7 @@
         var obj = this;
         
         var init = function(){
-            $el = $(SearchItem.getTemplate('layout', [id, params]));
+            $el = $(SearchItem.getTemplate('layout', [id, params, context.settings.operators]));
             context.addItem( obj );
             
             getNode('checkBox').iCheck('destroy').iCheck({
@@ -120,11 +120,11 @@
     SearchItem.getTemplate = function(item, params){
         var tpl = {};
         
-        tpl.layout = function(id, params){
+        tpl.layout = function(id, params, operators){
             var xhtml = '<div class="row">';
                 xhtml += SearchItem.getTemplate('checkboxLayout', [id, params]);
                 xhtml += SearchItem.getTemplate('labelLayout', [id, params]);
-                xhtml += SearchItem.getTemplate('operatorListLayout', [id, params]);
+                xhtml += SearchItem.getTemplate('operatorListLayout', [id, params, operators]);
                 xhtml += SearchItem.getTemplate('valuesLayout', [id, params]);
                 xhtml += '</div>';
             return xhtml;
@@ -171,13 +171,13 @@
             return xhtml;
         };
         
-        tpl.operatorListLayout = function(id, params){
+        tpl.operatorListLayout = function(id, params, operators){
             var xhtml = '<div class="form-group col-md-2">'+
                 '<select name="search['+ id +'][operator]" class="form-control  input-block-level operators">';
 
                     for(var i in SearchItem.operatorByType[params.type]){
                         xhtml += '<option value="'+ SearchItem.operatorByType[params.type][i] +'">'+ 
-                                    SearchItem.operatorList[ SearchItem.operatorByType[params.type][i] ] +
+                                    operators[ SearchItem.operatorByType[params.type][i] ] +
                                 '</option>';
                     }
 
@@ -265,6 +265,7 @@
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
                 settings.url = input.url;
+                settings.operators = input.operators;
             }
             
             if( 'undefined' !== typeof(settings.params) ){
