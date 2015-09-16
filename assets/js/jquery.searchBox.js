@@ -8,7 +8,7 @@
         var obj = this;
         
         var init = function(){
-            $el = $(SearchItem.getTemplate('layout', [id, params, context.settings.operators]));
+            $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('operators')]));
             context.addItem( obj );
             
             getNode('checkBox').iCheck('destroy').iCheck({
@@ -252,6 +252,14 @@
                 isJSON: false
         }, opts || {});
         var items = [];
+        
+        this.getSettings = function(key){
+            if(['operators'].indexOf(key) > -1){
+                return settings[key];
+            }
+            
+            return null;
+        };
         
         var init = function(){
             
