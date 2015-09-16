@@ -140,7 +140,7 @@ trait SearchTrait
     {
         $searchParams = [];
         
-        dd(trans('search-box::search_box'));
+        dd(trans('search-box::operators'));
 
         foreach (static::$_searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
@@ -158,7 +158,13 @@ trait SearchTrait
             }
         }
 
-        return json_encode(['url' => $url, 'params' => $searchParams]);
+        return json_encode(
+            [
+            'url' => $url, 
+            'params' => $searchParams, 
+            'operators'=>trans('search-box::operators')
+            ]
+        );
     }
 
 }
