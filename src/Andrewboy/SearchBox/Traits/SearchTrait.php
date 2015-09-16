@@ -140,7 +140,7 @@ trait SearchTrait
     {
         $searchParams = [];
         
-        dd(trans('search-box::search_box.title'));
+        dd(trans('search-box::search_box'));
 
         foreach (static::$_searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
