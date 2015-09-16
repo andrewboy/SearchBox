@@ -43,7 +43,7 @@ trait SearchTrait
         }
     }
 
-    protected function extendSearch($query, array &$params)
+    protected function extendSearch(&$query, array &$params)
     {
         //
     }
@@ -137,9 +137,9 @@ trait SearchTrait
         }
     }
 
-    public static function getSearchSet($url)
+    public static function getSearchSet($url, array $extended=[])
     {
-        $searchParams = [];
+        $searchParams = $extended;
         
         foreach (static::$_searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
