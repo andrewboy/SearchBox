@@ -8,7 +8,7 @@
         var obj = this;
         
         var init = function(){
-            $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('operators')]));
+            $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('itemLabels'), context.getSettings('itemOperators')]));
             context.addItem( obj );
             
             getNode('checkBox').iCheck('destroy').iCheck({
@@ -120,10 +120,10 @@
     SearchItem.getTemplate = function(item, params){
         var tpl = {};
         
-        tpl.layout = function(id, params, operators){
+        tpl.layout = function(id, params, labels, operators){
             var xhtml = '<div class="row">';
-                xhtml += SearchItem.getTemplate('checkboxLayout', [id, params]);
-                xhtml += SearchItem.getTemplate('labelLayout', [id, params]);
+                xhtml += SearchItem.getTemplate('checkboxLayout', [id]);
+                xhtml += SearchItem.getTemplate('labelLayout', [id, labels]);
                 xhtml += SearchItem.getTemplate('operatorListLayout', [id, params, operators]);
                 xhtml += SearchItem.getTemplate('valuesLayout', [id, params]);
                 xhtml += '</div>';
@@ -187,52 +187,19 @@
             return xhtml;
         };
         
-        tpl.labelLayout = function(id, params){
+        tpl.labelLayout = function(id, labels){
             return '<div class="form-group col-md-2">'+
-                '<label>'+ params.name +'</label>'+
+                '<label>'+ labels[ id ] +'</label>'+
             '</div>';
         };
         
-        tpl.checkboxLayout = function(id, params){
+        tpl.checkboxLayout = function(id){
             return '<div class="form-group col-md-1 text-center">'+
                 '<input type="checkbox" class="icheck" name="search['+ id +'][search]" value="1" />'+
                 '</div>';
         };
         
         return tpl[item].apply(this, params);
-    };
-
-    SearchItem.operatorList = {
-        "=": "egyenlő",
-        "!=": "nem egyenlő",
-        "o": "nyitott",
-        "c": "lezárt",
-        "!*": "nincs",
-        "*": "mind",
-        ">=": ">=",
-        "<=": "<=",
-        "><": "között",
-        "<t+": "kevesebb, mint",
-        ">t+": "több, mint",
-        "><t+": "in the next",
-        "t+": "in",
-        "t": "ma",
-        "ld": "tegnap",
-        "w": "aktuális hét",
-        "lw": "múlt hét",
-        "l2w": "last 2 weeks",
-        "m": "aktuális hónap",
-        "lm": "múlt hónap",
-        "y": "aktuális év",
-        ">t-": "kevesebb, mint nappal ezelőtt",
-        "<t-": "több, mint nappal ezelőtt",
-        "><t-": "in the past",
-        "t-": "nappal ezelőtt",
-        "~": "tartalmazza",
-        "!~": "nem tartalmazza",
-        "=p": "any issues in project",
-        "=!p": "any issues not in project",
-        "!p": "no issues in project"
     };
 
     SearchItem.operatorByType = {
@@ -254,7 +221,7 @@
         var items = [];
         
         this.getSettings = function(key){
-            if(['operators'].indexOf(key) > -1){
+            if(['itemOperators','itemLabels'].indexOf(key) > -1){
                 return settings[key];
             }
             
@@ -273,7 +240,8 @@
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
                 settings.url = input.url;
-                settings.operators = input.operators;
+                settings.itemOperators = input.operators;
+                settings.itemLabels = input.fieldLabels;
             }
             
             if( 'undefined' !== typeof(settings.params) ){

@@ -156,12 +156,15 @@ trait SearchTrait
             }
         }
 
+        /**
+         * Todo: check existence on trans files 
+         */
         return json_encode(
             [
             'url' => $url, 
             'params'    =>  $searchParams, 
             'operators' =>  trans('search-box::operators'),
-            'fieldNames'=>  trans('search-box::field_names.'.__CLASS__)
+            'fieldLabels'=>  trans('search-box::field_names.'.__CLASS__)
             ]
         );
     }
