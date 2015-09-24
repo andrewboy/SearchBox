@@ -52,6 +52,12 @@ trait SearchTrait
         //
     }
 
+    /**
+     * Process INTEGER type of search
+     * @param Builder $query
+     * @param string $key
+     * @param array $values
+     */
     protected function setIntegerSearchQuery($query, $key, array $values)
     {
         switch ($values['operator']) {
@@ -69,6 +75,12 @@ trait SearchTrait
         }
     }
 
+    /**
+     * Process DATE type of query
+     * @param Builder $query
+     * @param string $key
+     * @param array $values
+     */
     protected function setDateSearchQuery($query, $key, array $values)
     {
         switch ($values['operator']) {
@@ -88,6 +100,12 @@ trait SearchTrait
         }
     }
 
+    /**
+     * Process STRING type of search
+     * @param Builder $query
+     * @param string $key
+     * @param array $values
+     */
     protected function setStringSearchQuery($query, $key, array $values)
     {
         switch ($values['operator']) {
@@ -101,6 +119,12 @@ trait SearchTrait
         }
     }
 
+    /**
+     * Process BOOLEAN type of search
+     * @param type $query
+     * @param type $key
+     * @param array $values
+     */
     protected function setBooleanSearchQuery($query, $key, array $values)
     {
         switch ($values['operator']) {
@@ -114,6 +138,12 @@ trait SearchTrait
         }
     }
 
+    /**
+     * Process LIST type of search
+     * @param type $query
+     * @param type $key
+     * @param array $values
+     */
     protected function setListSearchQuery($query, $key, array $values)
     {
         switch ($values['operator']) {
@@ -141,6 +171,12 @@ trait SearchTrait
         }
     }
 
+    /**
+     * Return the search set for the frontend javascript code
+     * @param string $url
+     * @param array $extended
+     * @return array
+     */
     public static function getSearchSet($url, array $extended = [])
     {
         $searchParams = $extended;
@@ -170,7 +206,12 @@ trait SearchTrait
         );
     }
 
-    public static function isValidSearchParam($param)
+    /**
+     * Validation helper for the extendSearch
+     * @param array $param
+     * @return boolean
+     */
+    public static function isValidSearchParam(array $param)
     {
         return is_array($param)
             && array_key_exists('operator', $param)
