@@ -2,6 +2,7 @@
   "private": true,
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-include": "^2.0.2"
+    "gulp-include": "^2.0.2",
+    "gulp-uglyfy": "*"
   }
 }

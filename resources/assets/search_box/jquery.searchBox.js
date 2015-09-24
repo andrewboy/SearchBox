@@ -19,3 +19,5 @@
     };
 
 })(jQuery);
+
+//=require jquery.urlParam.js

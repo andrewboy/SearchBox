@@ -3,6 +3,11 @@
 trait SearchTrait
 {
 
+    /**
+     * The main search method
+     * @param Builder $query Builder class from Laravel
+     * @param array $params Search parameters
+     */
     public function scopeSearch($query, array $params)
     {
         if (isset($params['search'])) {
@@ -37,6 +42,11 @@ trait SearchTrait
         }
     }
 
+    /**
+     * Extend search with special process
+     * @param Builder $query
+     * @param array $params
+     */
     protected function extendSearch(&$query, array &$params)
     {
         //

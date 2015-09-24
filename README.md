@@ -30,3 +30,8 @@ publish config and migration:
 php artisan vendor:publish --provider="Andrewboy\SearchBox\SearchBoxServiceProvider"
 ```
 
+add javascript plugin to the site
+
+```bash
+
+```
