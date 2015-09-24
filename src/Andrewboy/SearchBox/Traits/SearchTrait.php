@@ -133,6 +133,8 @@ trait SearchTrait
 
     public static function getSearchSet($url, array $extended = [])
     {
+        dd(trans('search-box::operators'));
+        
         $searchParams = $extended;
 
         foreach (static::$searchParams as $key => $searchParam) {
