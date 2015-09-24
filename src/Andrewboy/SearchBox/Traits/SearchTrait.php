@@ -10,8 +10,8 @@ trait SearchTrait
 
             foreach ($params['search'] as $key => $values) {
                 if (false !== $key
-                    && in_array($key, array_keys(static::$_searchParams)) && self::isValidSearchParam($values)) {
-                    switch (static::$_searchParams[$key]['type']) {
+                    && in_array($key, array_keys(static::$searchParams)) && self::isValidSearchParam($values)) {
+                    switch (static::$searchParams[$key]['type']) {
                         case 'integer':
                             $this->setIntegerSearchQuery($query, $key, $values);
                             break;
@@ -110,7 +110,7 @@ trait SearchTrait
             case '=':
                 $ids = $values['values'];
                 $query->whereHas(
-                    static::$_searchParams[$key]['relation'][0],
+                    static::$searchParams[$key]['relation'][0],
                     function ($q) use ($ids) {
                         $q->whereIn('id', $ids);
                     },
@@ -122,7 +122,7 @@ trait SearchTrait
             case '!=':
                 $ids = $values['values'];
                 $query->whereHas(
-                    static::$_searchParams[$key]['relation'][0],
+                    static::$searchParams[$key]['relation'][0],
                     function ($q) use ($ids) {
                         $q->whereNotIn('id', $ids);
                     }
@@ -135,7 +135,7 @@ trait SearchTrait
     {
         $searchParams = $extended;
 
-        foreach (static::$_searchParams as $key => $searchParam) {
+        foreach (static::$searchParams as $key => $searchParam) {
             $searchParams[$key] = $searchParam;
             if ('list' === $searchParam['type']) {
                 $self = new self;
