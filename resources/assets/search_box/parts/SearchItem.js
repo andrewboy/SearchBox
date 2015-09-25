@@ -82,6 +82,7 @@ var SearchItem = function (context, id, params) {
          * @returns {undefined}
          */
         init = function () {
+            window.console.log(params);
             $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('itemLabels'), context.getSettings('itemOperators')]));
             context.addItem(obj);
 
