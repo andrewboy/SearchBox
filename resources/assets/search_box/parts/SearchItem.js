@@ -198,13 +198,14 @@ SearchItem.getTemplate = function (item, params) {
      */
     tpl.valuesLayout = function (id, params) {
         var xhtml = '',
-            i;
+            i,
+            isMultiple = params.values.length > 1;
         xhtml += '<div class="row col-md-7">';
 
         if (params.type === 'list') {
 
             xhtml += '<div class="form-group col-md-2">';
-            xhtml += '<select name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="1">';
+            xhtml += '<select ' + (isMultiple ? 'multiple' : '') + ' name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="' + (isMultiple ? 4 : 1) + '">';
 
             for (i in params.values) {
                 if (params.values.hasOwnProperty(i)) {
@@ -216,8 +217,8 @@ SearchItem.getTemplate = function (item, params) {
             xhtml += '</div>';
 
             xhtml += '<div class="form-group col-md-2">' +
-                    '<button type="button" class="btn btn-sm btn-primary glyphicon list-toggle">' +
-                    '<i class="fa fa-plus"></i>' +
+                    '<button type="button" class="btn btn-sm ' + (isMultiple ? 'btn-danger' : 'btn-primary') + ' glyphicon list-toggle">' +
+                    '<i class="fa fa-' + (isMultiple ? 'minus' : 'plus') + '"></i>' +
                     '</button>' +
                     '</div>';
 
