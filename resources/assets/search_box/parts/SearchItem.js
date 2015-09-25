@@ -200,6 +200,7 @@ SearchItem.getTemplate = function (item, params) {
         var xhtml = '',
             i,
             isMultiple = params.values.length > 1;
+        window.console.log(params.values, params.values.length, isMultiple);
         xhtml += '<div class="row col-md-7">';
 
         if (params.type === 'list') {
