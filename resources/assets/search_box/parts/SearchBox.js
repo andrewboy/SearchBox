@@ -60,8 +60,8 @@ var SearchBox = function (el, opts) {
                         if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
                             item = new SearchItem(obj, id, settings.params[id]);
                             item.setChecked(true);
-                            item.setOperator(searchSettings[id].operator);
-                            item.setValues(searchSettings[id].values);
+//                            item.setOperator(searchSettings[id].operator);
+//                            item.setValues(searchSettings[id].values);
                         }
                     }
                 }
@@ -114,6 +114,7 @@ var SearchBox = function (el, opts) {
          * @returns {undefined}
          */
         init = function () {
+            //SET PARAMS
             if (undefined === settings.params && undefined !== window.searchBoxParams) {
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
@@ -121,7 +122,7 @@ var SearchBox = function (el, opts) {
                 settings.itemOperators = input.operators;
                 settings.itemLabels = input.fieldLabels;
             }
-
+            //SET ENVIROMENT
             if (undefined !== settings.params) {
                 getNode('searchItemSelector')
                         .append(SearchBox.getTemplate('selectOptionsLayout', [{'cls': '', 'name': '', 'options': settings.params}, settings.itemLabels]));
@@ -130,7 +131,7 @@ var SearchBox = function (el, opts) {
 
                 setInitialState();
             }
-
+            //SET JSON MODE
             if (settings.isJSON) {
                 getNode('form').submit(submitHandler);
             }
