@@ -181,9 +181,22 @@ to insert the view
 
 ### Integer
 
+Operators: equals (=), not equals (!=), greater than or equal (>=), less than or equal (<=), (><),
+
 ### Date
+
+Operators: equals (=), greater than or equal (>=), less than or equal (<=), not equal (><)
+
 ### String
+
+Operators: contains (~), not contains (!~)
+
 ### Boolean
+
+Operators: equals (=), not equals (!=)
+
 ### List
+
+Operators: equals (=), not equals (!=)
 
 write down how to publish the parts of the code etc.
