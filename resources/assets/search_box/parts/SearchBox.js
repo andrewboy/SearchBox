@@ -60,8 +60,8 @@ var SearchBox = function (el, opts) {
                         if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
                             item = new SearchItem(obj, id, settings.params[id]);
                             item.setChecked(true);
-//                            item.setOperator(searchSettings[id].operator);
-//                            item.setValues(searchSettings[id].values);
+                            item.setOperator(searchSettings[id].operator);
+                            item.setValues(searchSettings[id].values);
                         }
                     }
                 }

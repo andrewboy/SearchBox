@@ -61,19 +61,33 @@ var SearchItem = function (context, id, params) {
         },
 
         /**
+         * Set valuelist state to mulit or single
+         * @param {Boolean} isExpand
+         * @returns {undefined}
+         */
+        expandValuesList = function (isExpand) {
+            var $variablesList = getNode('filterVal1');
+            if (!isExpand) {
+                $variablesList.attr('size', 1).attr('multiple', false);
+                getNode('listToggleBtn').removeClass('btn-danger').addClass('btn-primary')
+                        .children().removeClass('fa-minus').addClass('fa-plus');
+            } else {
+                $variablesList.attr('size', 4).attr('multiple', true);
+                getNode('listToggleBtn').addClass('btn-danger').removeClass('btn-primary')
+                        .children().removeClass('fa-plus').addClass('fa-minus');
+            }
+        },
+
+        /**
          * Handle toggle button between single and multiple state
          * @returns {undefined}
          */
         toggleBtnHandler = function () {
             var $variablesList = getNode('filterVal1');
             if ($variablesList.is("[multiple]")) {
-                $variablesList.attr('size', 1).attr('multiple', false);
-                $(this).removeClass('btn-danger').addClass('btn-primary')
-                        .children().removeClass('fa-minus').addClass('fa-plus');
+                expandValuesList(true);
             } else {
-                $variablesList.attr('size', 4).attr('multiple', true);
-                $(this).addClass('btn-danger').removeClass('btn-primary')
-                        .children().removeClass('fa-plus').addClass('fa-minus');
+                expandValuesList(false);
             }
         },
 
@@ -82,7 +96,6 @@ var SearchItem = function (context, id, params) {
          * @returns {undefined}
          */
         init = function () {
-            window.console.log(params);
             $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('itemLabels'), context.getSettings('itemOperators')]));
             context.addItem(obj);
 
@@ -127,6 +140,10 @@ var SearchItem = function (context, id, params) {
      * @returns {undefined}
      */
     this.setValues = function (values) {
+        if ('list' === params.type) {
+            expandValuesList(true);
+        }
+
         getNode('filterVal1').val(values[0]);
         if (values.length > 1) {
             getNode('filterVal2').val(values[1]);
@@ -199,15 +216,13 @@ SearchItem.getTemplate = function (item, params) {
      */
     tpl.valuesLayout = function (id, params) {
         var xhtml = '',
-            i,
-            isMultiple = params.values && params.values.length > 1;
+            i;
         xhtml += '<div class="row col-md-7">';
 
         if (params.type === 'list') {
-        window.console.log(params.values, params.values.length, isMultiple);
 
             xhtml += '<div class="form-group col-md-2">';
-            xhtml += '<select ' + (isMultiple ? 'multiple' : '') + ' name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="' + (isMultiple ? 4 : 1) + '">';
+            xhtml += '<select name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="1">';
 
             for (i in params.values) {
                 if (params.values.hasOwnProperty(i)) {
@@ -219,8 +234,8 @@ SearchItem.getTemplate = function (item, params) {
             xhtml += '</div>';
 
             xhtml += '<div class="form-group col-md-2">' +
-                    '<button type="button" class="btn btn-sm ' + (isMultiple ? 'btn-danger' : 'btn-primary') + ' glyphicon list-toggle">' +
-                    '<i class="fa fa-' + (isMultiple ? 'minus' : 'plus') + '"></i>' +
+                    '<button type="button" class="btn btn-sm btn-primary glyphicon list-toggle">' +
+                    '<i class="fa fa-plus"></i>' +
                     '</button>' +
                     '</div>';
 
