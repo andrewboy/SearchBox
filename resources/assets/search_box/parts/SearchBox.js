@@ -59,7 +59,7 @@ var SearchBox = function (el, opts) {
 
                 for (id in searchSettings) {
                     if (searchSettings.hasOwnProperty(id)) {
-                        if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
+                        if (searchSettings[id].active > 0 && Object.keys(settings.params).indexOf(id) > -1) {
                             item = new SearchItem(obj, id, settings.params[id]);
                             item.setChecked(true);
                             item.setOperator(searchSettings[id].operator);
