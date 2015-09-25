@@ -86,12 +86,7 @@
              * @returns {undefined}
              */
             toggleBtnHandler = function () {
-                var $variablesList = getNode('filterVal1');
-                if ($variablesList.is("[multiple]")) {
-                    expandValuesList(true);
-                } else {
-                    expandValuesList(false);
-                }
+                expandValuesList(!getNode('filterVal1').is("[multiple]"));
             },
     
             /**
@@ -143,7 +138,7 @@
          * @returns {undefined}
          */
         this.setValues = function (values) {
-            if ('list' === params.type) {
+            if ('list' === params.type && values.length > 1) {
                 expandValuesList(true);
             }
     
