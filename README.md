@@ -82,67 +82,91 @@ class Banner extends Eloquent
 in the model set the attributes like:
 
 ```bash
-    protected static $searchParams = [
-        'id' => [
-            'type' => 'integer'
-        ],
-        'name' => [
-            'type' => 'string'
-        ],
-        'url' => [
-            'type' => 'string'
-        ],
-        'is_active' => [
-            'type' => 'boolean'
-        ],
-        'has_attachment' => [
-            'type' => 'boolean'
-        ],
-        'banner_place_id'    =>  [
-            'type'  =>  'list',
-            'relation'  =>  ['groups', 'name']
-        ],
-        'created_at' => [
-            'type' => 'date'
-        ],
-    ];
+protected static $searchParams = [
+    'id' => [
+        'type' => 'integer'
+    ],
+    'name' => [
+        'type' => 'string'
+    ],
+    'url' => [
+        'type' => 'string'
+    ],
+    'is_active' => [
+        'type' => 'boolean'
+    ],
+    'has_attachment' => [
+        'type' => 'boolean'
+    ],
+    'group_id'    =>  [
+        'type'  =>  'list',
+        'relation'  =>  ['groups', 'name']
+    ],
+    'created_at' => [
+        'type' => 'date'
+    ],
+];
 ```
 
 in the model, extend the search for special cases
 
 ```bash
-    protected function extendSearch(&$query, array &$params)
-    {
-        #BANNER_PLACE_ID
-        if (isset($params['banner_place_id']) && self::isValidSearchParam($params['banner_place_id'])) {
-            switch ($params['banner_place_id']['operator']) {
-                case '=':
-                    $query->whereIn('banner_place_id', $params['banner_place_id']['values']);
-                    break;
+protected function extendSearch(&$query, array &$params)
+{
+    #BANNER_PLACE_ID
+    if (isset($params['banner_place_id']) && self::isValidSearchParam($params['banner_place_id'])) {
+        switch ($params['banner_place_id']['operator']) {
+            case '=':
+                $query->whereIn('banner_place_id', $params['banner_place_id']['values']);
+                break;
 
-                case '!=':
-                    $query->whereNotIn('banner_place_id', $params['banner_place_id']['values']);
-                    break;
-            }
-
-            unset($params['banner_place_id']);
+            case '!=':
+                $query->whereNotIn('banner_place_id', $params['banner_place_id']['values']);
+                break;
         }
 
-        #HAS_ATTACHMENT
-        if (isset($params['has_attachment']) && self::isValidSearchParam($params['has_attachment'])) {
-            switch ($params['has_attachment']['operator']) {
-                case '=':
-                    $query->has('attachment', 'LIKE', intval($params['has_attachment']['values'][0]));
-                    break;
-
-                case '!=':
-                    $query->has('attachment', 'NOT LIKE', intval($params['has_attachment']['values'][0]));
-                    break;
-            }
-
-            unset($params['has_attachment']);
-        }
+        unset($params['banner_place_id']);
     }
+
+    #HAS_ATTACHMENT
+    if (isset($params['has_attachment']) && self::isValidSearchParam($params['has_attachment'])) {
+        switch ($params['has_attachment']['operator']) {
+            case '=':
+                $query->has('attachment', 'LIKE', intval($params['has_attachment']['values'][0]));
+                break;
+
+            case '!=':
+                $query->has('attachment', 'NOT LIKE', intval($params['has_attachment']['values'][0]));
+                break;
+        }
+
+        unset($params['has_attachment']);
+    }
+}
+```
+
+### Use Models' realtions in the fast and easy way
+
+when you want to reach the models' relations, the you have to define like this
+
+```bash
+    protected static $searchParams = [
+        'group_id'    =>  [
+            'type'  =>  'list',
+            'relation'  =>  ['groups', 'name']
+        ],
+    ];
+```
+
+where the type is set to 'list'
+
+the relation is set by
+
+```bash
+[
+    [relation_method_name],
+    [attribute_name_which_you_want_to_use_in_dropdown]
+]
 ```
 
 ## Set up the controller
