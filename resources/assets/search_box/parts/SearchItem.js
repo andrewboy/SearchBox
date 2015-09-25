@@ -200,10 +200,10 @@ SearchItem.getTemplate = function (item, params) {
         var xhtml = '',
             i,
             isMultiple = params.values && params.values.length > 1;
-
         xhtml += '<div class="row col-md-7">';
 
         if (params.type === 'list') {
+        window.console.log(params.values, params.values.length, isMultiple);
 
             xhtml += '<div class="form-group col-md-2">';
             xhtml += '<select ' + (isMultiple ? 'multiple' : '') + ' name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="' + (isMultiple ? 4 : 1) + '">';
