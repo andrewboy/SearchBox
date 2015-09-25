@@ -145,7 +145,7 @@ protected function extendSearch(&$query, array &$params)
 }
 ```
 
-### Use Models' realtions in the fast and easy way
+### Use Models' realtions with the fast and easy way
 
 when you want to reach the models' relations, the you have to define like this
 
