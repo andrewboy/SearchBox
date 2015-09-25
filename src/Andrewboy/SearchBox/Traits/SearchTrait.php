@@ -13,28 +13,28 @@ trait SearchTrait
         if (isset($params['search'])) {
             $this->extendSearch($query, $params['search']);
 
-            foreach ($params['search'] as $key => $values) {
-                if (false !== $key
-                    && in_array($key, array_keys(static::$searchParams)) && self::isValidSearchParam($values)) {
-                    switch (static::$searchParams[$key]['type']) {
+            foreach ($params['search'] as $id => $values) {
+                if (false !== $id
+                    && in_array($id, array_keys(static::$searchParams)) && self::isValidSearchParam($values)) {
+                    switch (static::$searchParams[$id]['type']) {
                         case 'integer':
-                            $this->setIntegerSearchQuery($query, $key, $values);
+                            $this->setIntegerSearchQuery($query, $id, $values);
                             break;
 
                         case 'date':
-                            $this->setDateSearchQuery($query, $key, $values);
+                            $this->setDateSearchQuery($query, $id, $values);
                             break;
 
                         case 'string':
-                            $this->setStringSearchQuery($query, $key, $values);
+                            $this->setStringSearchQuery($query, $id, $values);
                             break;
 
                         case 'boolean':
-                            $this->setBooleanSearchQuery($query, $key, $values);
+                            $this->setBooleanSearchQuery($query, $id, $values);
                             break;
 
                         case 'list':
-                            $this->setListSearchQuery($query, $key, $values);
+                            $this->setListSearchQuery($query, $id, $values);
                             break;
                     }
                 }
@@ -179,17 +179,33 @@ trait SearchTrait
      */
     public static function getSearchSet($url, array $extended = [])
     {
-        $searchParams = $extended;
+        $searchParams = [];
 
-        foreach (static::$searchParams as $key => $searchParam) {
-            $searchParams[$key] = $searchParam;
+        #SET DEFAULT SETTINGS FROM THE MODEL
+        foreach (static::$searchParams as $id => $searchParam) {
+            $searchParams[$id] = $searchParam;
             if ('list' === $searchParam['type']) {
                 $self = new self;
                 $relationClass = get_class(
                     $self->{$searchParam['relation'][0]}()->getRelated()
                 );
-                $searchParams[$key]['values'] = $relationClass::lists($searchParam['relation'][1], 'id')->all();
-                unset($searchParams[$key]['relation']);
+                $searchParams[$id]['values'] = $relationClass::lists($searchParam['relation'][1], 'id')->all();
+                unset($searchParams[$id]['relation']);
+            }
+        }
+
+        #SET EXTENDED SETTINGS
+        if (count($extended) > 0) {
+            foreach ($extended as $id => $searchItem) {
+                if (array_key_exists($id, $searchParams)) {
+                    if (array_key_exists('values', $searchItem) && is_array($searchItem['values'])) {
+                        $searchParams[$id]['values'] = $searchItem['values'];
+                    }
+                } else {
+                    if (self::isValidSearchParam($searchItem)) {
+                        $searchParams[$id] = $searchItem;
+                    }
+                }
             }
         }
 
