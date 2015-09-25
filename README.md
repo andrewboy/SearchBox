@@ -30,6 +30,8 @@ publish config and migration:
 php artisan vendor:publish --provider="Andrewboy\SearchBox\SearchBoxServiceProvider"
 ```
 
+## Set up javascript plugin
+
 add javascript plugin to the site
 
 ```bash
@@ -47,6 +49,20 @@ add plugin to your javascript file
 ```bash
 $('.searchbox').searchBox();
 ```
+
+You have two choice to pass the search params
+
+### 1. Just create the 'searchParams' php variable
+
+### 2. You can pass the parameters through the plugin
+
+```bash
+$('.searchbox').searchBox({
+    params: {{ searchParams }}
+});
+```
+
+## Set up Model
 
 add the trait to your models that you want to search
 
@@ -125,6 +141,8 @@ in the model, extend the search for special cases
     }
 ```
 
+## Set up the controller
+
 in the controller, pass the search params:
 
 ```bash
@@ -157,19 +175,13 @@ in the controller, you can use it to search
 $banners = Banner::search(Input::all());
 ```
 
-the filter types:
-
-```bash
-integer
-date
-string
-boolean
-list
-```
+## Set language
 
 default language set is hu, en
 
 you can extend the language in 'resources/lang/vendor/search-box'
+
+## Set view
 
 to insert the view
 
@@ -177,7 +189,7 @@ to insert the view
 @include('search-box::searchBox')
 ```
 
-## Filters
+## Built in filters
 
 ### Integer
 
