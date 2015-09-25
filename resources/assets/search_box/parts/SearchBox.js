@@ -164,7 +164,7 @@ var SearchBox = function (el, opts) {
      */
     this.removeItem = function (id) {
         delete items[id];
-        getNode('searchItemSelector').children('[value="' + id + '"]').attr('disabled', true);
+        getNode('searchItemSelector').children('[value="' + id + '"]').attr('disabled', false);
     };
 
     /**
