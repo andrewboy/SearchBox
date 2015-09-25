@@ -24,7 +24,7 @@ add service provider to the providers list:
 'Andrewboy\SearchBox\SearchBoxServiceProvider'
 ```
 
-publish config and migration: 
+publish view, langs and public parts: 
 
 ```bash
 php artisan vendor:publish --provider="Andrewboy\SearchBox\SearchBoxServiceProvider"
