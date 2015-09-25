@@ -25,7 +25,7 @@
                 </select>
             </div>
             <button class="btn btn-primary btn-flat" type="submit">{{trans('search-box::search_box.btnSearch')}}</button>
-            <button class="btn btn-primary btn-flat" type="submit">{{trans('search-box::search_box.btnClear')}}</button>
+            <button class="btn btn-primary btn-flat searchbox-clear" type="button">{{trans('search-box::search_box.btnClear')}}</button>
         </div>
     </form>
 

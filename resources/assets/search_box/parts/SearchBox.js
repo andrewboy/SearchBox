@@ -38,6 +38,8 @@ var SearchBox = function (el, opts) {
 
             case 'form':
                 return $('form', $el);
+            case 'clearBtn':
+                return $('.searchbox-clear', $el);
             }
         },
 
@@ -110,6 +112,20 @@ var SearchBox = function (el, opts) {
         },
 
         /**
+         * Handle clear button 'click' event
+         * @returns {undefined}
+         */
+        clearBtnHandler = function () {
+            var i;
+
+            for (i in items) {
+                if (items.hasOwnProperty(i)) {
+                    items[i].destroy();
+                }
+            }
+        },
+
+        /**
          * Initalize the object
          * @returns {undefined}
          */
@@ -122,21 +138,33 @@ var SearchBox = function (el, opts) {
                 settings.itemOperators = input.operators;
                 settings.itemLabels = input.fieldLabels;
             }
+
             //SET ENVIROMENT
             if (undefined !== settings.params) {
                 getNode('searchItemSelector')
                         .append(SearchBox.getTemplate('selectOptionsLayout', [{'cls': '', 'name': '', 'options': settings.params}, settings.itemLabels]));
                 getNode('searchItemSelector').on('change', searchItemSelectorHandler);
                 getNode('form').attr('action', settings.url);
+                getNode('clearBtn').on('click', clearBtnHandler);
 
                 setInitialState();
             }
+
             //SET JSON MODE
             if (settings.isJSON) {
                 getNode('form').submit(submitHandler);
             }
 
         };
+
+    /**
+     * Remove one searchItem from items
+     * @param {type} id
+     * @returns {undefined}
+     */
+    this.removeItem = function (id) {
+        delete items[id];
+    };
 
     /**
      * Get setting

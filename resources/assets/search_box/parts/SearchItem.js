@@ -104,6 +104,16 @@ var SearchItem = function (context, id, params) {
         };
 
     /**
+     * Destroy search item
+     * @returns {undefined}
+     */
+    this.destroy = function () {
+        $el.remove();
+        params = undefined;
+        context.removeItem(id);
+    };
+
+    /**
      * Get the search item element node reference
      * @returns {SearchItem.$el|$}
      */
@@ -144,8 +154,6 @@ var SearchItem = function (context, id, params) {
                 getNode('filterVal2').val(values[1]);
             }
         }
-        
-
     };
 
     /**
