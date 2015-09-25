@@ -85,6 +85,7 @@
              * @returns {undefined}
              */
             init = function () {
+                window.console.log(params);
                 $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('itemLabels'), context.getSettings('itemOperators')]));
                 context.addItem(obj);
     
@@ -202,10 +203,11 @@
         tpl.valuesLayout = function (id, params) {
             var xhtml = '',
                 i,
-                isMultiple = params.values.length > 1;
+                isMultiple = params.values && params.values.length > 1;
             xhtml += '<div class="row col-md-7">';
     
             if (params.type === 'list') {
+            window.console.log(params.values, params.values.length, isMultiple);
     
                 xhtml += '<div class="form-group col-md-2">';
                 xhtml += '<select ' + (isMultiple ? 'multiple' : '') + ' name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="' + (isMultiple ? 4 : 1) + '">';
@@ -370,8 +372,8 @@
                             if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
                                 item = new SearchItem(obj, id, settings.params[id]);
                                 item.setChecked(true);
-                                item.setOperator(searchSettings[id].operator);
-                                item.setValues(searchSettings[id].values);
+    //                            item.setOperator(searchSettings[id].operator);
+    //                            item.setValues(searchSettings[id].values);
                             }
                         }
                     }
@@ -424,6 +426,7 @@
              * @returns {undefined}
              */
             init = function () {
+                //SET PARAMS
                 if (undefined === settings.params && undefined !== window.searchBoxParams) {
                     var input = JSON.parse(window.searchBoxParams);
                     settings.params = input.params;
@@ -431,7 +434,7 @@
                     settings.itemOperators = input.operators;
                     settings.itemLabels = input.fieldLabels;
                 }
-    
+                //SET ENVIROMENT
                 if (undefined !== settings.params) {
                     getNode('searchItemSelector')
                             .append(SearchBox.getTemplate('selectOptionsLayout', [{'cls': '', 'name': '', 'options': settings.params}, settings.itemLabels]));
@@ -440,7 +443,7 @@
     
                     setInitialState();
                 }
-    
+                //SET JSON MODE
                 if (settings.isJSON) {
                     getNode('form').submit(submitHandler);
                 }
