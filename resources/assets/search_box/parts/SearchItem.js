@@ -310,7 +310,7 @@ SearchItem.getTemplate = function (item, params) {
      */
     tpl.checkboxLayout = function (id) {
         return '<div class="form-group col-md-1 text-center">' +
-                '<input type="checkbox" class="icheck" name="search[' + id + '][search]" value="1" />' +
+                '<input type="checkbox" class="icheck" name="search[' + id + '][active]" value="1" />' +
                 '</div>';
     };
 

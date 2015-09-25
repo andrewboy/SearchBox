@@ -214,7 +214,7 @@ trait SearchTrait
             && array_key_exists('operator', $param)
             && array_key_exists('values', $param)
             && is_array($param['values'])
-            && (array_key_exists('search', $param)
-            && (bool) $param['search']);
+            && (array_key_exists('active', $param)
+            && (bool) $param['active']);
     }
 }
