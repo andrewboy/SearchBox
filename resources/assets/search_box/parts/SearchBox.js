@@ -1,4 +1,6 @@
 /*global $*/
+/*global SearchItem*/
+/*global window*/
 var SearchBox = function (el, opts) {
     "use strict";
 
@@ -34,18 +36,52 @@ var SearchBox = function (el, opts) {
                 getNode('body').css('display', 'block');
                 getNode('footer').css('display', 'block');
 
-                var searchSettings = $.getParam('search');
+                var searchSettings = $.getParam('search'),
+                    id,
+                    item;
 
-                for (var id in searchSettings) {
-                    if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
-                        var item = new SearchItem(obj, id, settings.params[id]);
-                        item.setChecked(true);
-                        item.setOperator(searchSettings[id].operator);
-                        item.setValues(searchSettings[id].values);
+                for (id in searchSettings) {
+                    if (searchSettings.hasOwnProperty(id)) {
+                        if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
+                            item = new SearchItem(obj, id, settings.params[id]);
+                            item.setChecked(true);
+                            item.setOperator(searchSettings[id].operator);
+                            item.setValues(searchSettings[id].values);
+                        }
                     }
                 }
             }
-            ;
+        },
+
+        submitHandler = function (e) {
+            e.preventDefault();
+
+            var $target = $(e.currentTarget);
+
+            $.ajax({
+                url: getNode('form').attr('action'),
+                type: 'get',
+                data: $target.serializeArray(),
+                dataType: 'json',
+                success: function (data, status, xhr) {
+                    if (undefined !== settings.events.onSuccess) {
+                        settings.events.onSuccess.call(this, data, status, xhr);
+                    }
+                }
+            });
+
+            return false;
+        },
+
+        searchItemSelectorHandler = function (e) {
+            var $target = $(e.currentTarget),
+                id = $target.val(),
+                item;
+
+            if (undefined === items[id]) {
+                item = new SearchItem(obj, id, settings.params[id]);
+                item.setChecked(true);
+            }
         },
 
         init = function () {
@@ -56,7 +92,7 @@ var SearchBox = function (el, opts) {
     //                getNode('footer').css('display','block');
     //            }
 
-            if ('undefined' === typeof (settings.params) && 'undefined' !== typeof (window.searchBoxParams)) {
+            if (undefined === settings.params && undefined !== window.searchBoxParams) {
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
                 settings.url = input.url;
@@ -64,7 +100,7 @@ var SearchBox = function (el, opts) {
                 settings.itemLabels = input.fieldLabels;
             }
 
-            if ('undefined' !== typeof (settings.params)) {
+            if (undefined !== settings.params) {
                 getNode('searchItemSelector')
                         .append(SearchBox.getTemplate('selectOptionsLayout', [{'cls': '', 'name': '', 'options': settings.params}, settings.itemLabels]));
                 getNode('searchItemSelector').on('change', searchItemSelectorHandler);
@@ -77,39 +113,7 @@ var SearchBox = function (el, opts) {
                 getNode('form').submit(submitHandler);
             }
 
-        },
-
-
-    submitHandler = function (e) {
-        e.preventDefault();
-
-        var $target = $(e.currentTarget);
-
-        $.ajax({
-            url: getNode('form').attr('action'),
-            type: 'get',
-            data: $target.serializeArray(),
-            dataType: 'json',
-            success: function (data, status, xhr) {
-                if ('undefined' != settings.events.onSuccess) {
-                    settings.events.onSuccess.call(this, data, status, xhr);
-                }
-            }
-        });
-
-        return false;
-    },
-
-    searchItemSelectorHandler = function (e) {
-        var $target = $(e.currentTarget);
-
-        var id = $target.val();
-
-        if ("undefined" === typeof (items[id])) {
-            var item = new SearchItem(obj, id, settings.params[id]);
-            item.setChecked(true);
-        }
-    };
+        };
 
     this.getSettings = function (key) {
         if (['itemOperators', 'itemLabels'].indexOf(key) > -1) {
@@ -125,7 +129,7 @@ var SearchBox = function (el, opts) {
 
     this.addItem = function (item) {
         getNode('body').append(item.getElement());
-        items[ item.getId() ] = item;
+        items[item.getId()] = item;
         getNode('searchItemSelector').children('[value="' + item.getId() + '"]').attr('disabled', true);
     };
 
@@ -134,13 +138,18 @@ var SearchBox = function (el, opts) {
 };
 
 SearchBox.getTemplate = function (item, params) {
+    "use strict";
+
     var tpl = {};
 
     tpl.selectOptionsLayout = function (params, labels) {
-        var xhtml = '';
+        var xhtml = '',
+            i;
 
-        for (var i in params.options) {
-            xhtml += '<option value="' + i + '">' + (labels[i] || i) + '</option>';
+        for (i in params.options) {
+            if (params.options.hasOwnProperty(i)) {
+                xhtml += '<option value="' + i + '">' + (labels[i] || i) + '</option>';
+            }
         }
 
         return xhtml;

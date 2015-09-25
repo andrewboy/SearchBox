@@ -1,48 +1,60 @@
+/*jslint indent: 4, maxerr: 500, vars: true, regexp: true, sloppy: true */
+/*global document*/
+/*global decodeURI*/
+/*global jQuery*/
 (function ($) {
     "use strict";
 
     $.getParams = function () {
-        var params = Object.create(null);
+        var params = Object.create(null),
+            i,
+            searchParams = document.location.search.substr(1),
+            arrSearchParams,
+            param,
+            realIdx,
 
-        var setParam = function (params, paramIndexes, value) {
-            var realParam = paramIndexes.shift();
-            var cleanedParam = realParam.match(/\[(.*?)\]/)[1];
+            setParam = function (params, paramIndexes, value) {
+                var realParam = paramIndexes.shift(),
+                    cleanedParam;
 
-            if ("undefined" === typeof (params[cleanedParam])) {
-                params[cleanedParam] = [];
-            }
+                cleanedParam = realParam.match(/\[(.*?)\]/)[1];
 
-            if (paramIndexes.length > 0) {
-                setParam(params[cleanedParam], paramIndexes, value);
-            } else {
-
-                if (realParam === '[]') {
-                    params.push(value);
-                } else {
-                    params[cleanedParam] = value;
+                if (undefined === params[cleanedParam]) {
+                    params[cleanedParam] = [];
                 }
-            }
 
-        };
+                if (paramIndexes.length > 0) {
+                    setParam(params[cleanedParam], paramIndexes, value);
+                } else {
 
-        var searchParams = document.location.search.substr(1);
-        var arrSearchParams = decodeURI(searchParams).split('&');
+                    if (realParam === '[]') {
+                        params.push(value);
+                    } else {
+                        params[cleanedParam] = value;
+                    }
+                }
+
+            };
+
+        arrSearchParams = decodeURI(searchParams).split('&');
 
         if (searchParams.length < 1 || arrSearchParams.length < 1) {
             return params;
         }
 
-        for (var i in arrSearchParams) {
-            var param = arrSearchParams[i].split('=');
-            var realIdx = param[0].replace(/\[.*?\]/g, '');
+        for (i in arrSearchParams) {
+            if (arrSearchParams.hasOwnProperty(i)) {
+                param = arrSearchParams[i].split('=');
+                realIdx = param[0].replace(/\[.*?\]/g, '');
 
-            if (param[0].search(/\[(.*?)\]/g) > -1) {
-                if ("undefined" === typeof (params[realIdx])) {
-                    params[realIdx] = [];
+                if (param[0].search(/\[(.*?)\]/g) > -1) {
+                    if (undefined === params[realIdx]) {
+                        params[realIdx] = [];
+                    }
+                    setParam(params[realIdx], param[0].match(/\[(.*?)\]/g), decodeURIComponent(param[1]));
+                } else {
+                    params[param[0]] = decodeURIComponent(param[1]);
                 }
-                setParam(params[realIdx], param[0].match(/\[(.*?)\]/g), decodeURIComponent(param[1]));
-            } else {
-                params[ param[0] ] = decodeURIComponent(param[1]);
             }
         }
 
@@ -52,7 +64,7 @@
     $.hasParam = function (paramName) {
         var params = $.getParams();
 
-        return "undefined" !== typeof (params[paramName]);
+        return undefined !== params[paramName];
     };
 
     $.getParam = function (paramName) {

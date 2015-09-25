@@ -40,7 +40,7 @@ var SearchItem = function (context, id, params) {
                 break;
             }
         },
-        toggleBtnHandler = function (/*e*/) {
+        toggleBtnHandler = function () {
             var $variablesList = getNode('filterVal1');
             if ($variablesList.is("[multiple]")) {
                 $variablesList.attr('size', 1).attr('multiple', false);
@@ -133,7 +133,9 @@ SearchItem.getTemplate = function (item, params) {
             xhtml += '<select name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="1">';
 
             for (i in params.values) {
-                xhtml += '<option value="' + i + '">' + params.values[i] + '</option>';
+                if (params.values.hasOwnProperty(i)) {
+                    xhtml += '<option value="' + i + '">' + params.values[i] + '</option>';
+                }
             }
 
             xhtml += '</select>';
@@ -171,9 +173,11 @@ SearchItem.getTemplate = function (item, params) {
                 '<select name="search[' + id + '][operator]" class="form-control  input-block-level operators">';
 
         for (i in SearchItem.operatorByType[params.type]) {
-            xhtml += '<option value="' + SearchItem.operatorByType[params.type][i] + '">' +
-                    operators[SearchItem.operatorByType[params.type][i]] +
-                    '</option>';
+            if (SearchItem.operatorByType[params.type].hasOwnProperty(i)) {
+                xhtml += '<option value="' + SearchItem.operatorByType[params.type][i] + '">' +
+                        operators[SearchItem.operatorByType[params.type][i]] +
+                        '</option>';
+            }
         }
 
         xhtml += '</select>' +

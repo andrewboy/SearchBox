@@ -193,9 +193,6 @@ trait SearchTrait
             }
         }
 
-        /**
-         * Todo: check existence on trans files
-         */
         return json_encode(
             [
                 'url' => $url,

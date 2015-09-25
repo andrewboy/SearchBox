@@ -43,7 +43,7 @@
                     break;
                 }
             },
-            toggleBtnHandler = function (/*e*/) {
+            toggleBtnHandler = function () {
                 var $variablesList = getNode('filterVal1');
                 if ($variablesList.is("[multiple]")) {
                     $variablesList.attr('size', 1).attr('multiple', false);
@@ -136,7 +136,9 @@
                 xhtml += '<select name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="1">';
     
                 for (i in params.values) {
-                    xhtml += '<option value="' + i + '">' + params.values[i] + '</option>';
+                    if (params.values.hasOwnProperty(i)) {
+                        xhtml += '<option value="' + i + '">' + params.values[i] + '</option>';
+                    }
                 }
     
                 xhtml += '</select>';
@@ -174,9 +176,11 @@
                     '<select name="search[' + id + '][operator]" class="form-control  input-block-level operators">';
     
             for (i in SearchItem.operatorByType[params.type]) {
-                xhtml += '<option value="' + SearchItem.operatorByType[params.type][i] + '">' +
-                        operators[SearchItem.operatorByType[params.type][i]] +
-                        '</option>';
+                if (SearchItem.operatorByType[params.type].hasOwnProperty(i)) {
+                    xhtml += '<option value="' + SearchItem.operatorByType[params.type][i] + '">' +
+                            operators[SearchItem.operatorByType[params.type][i]] +
+                            '</option>';
+                }
             }
     
             xhtml += '</select>' +
@@ -209,6 +213,8 @@
     };
     
     /*global $*/
+    /*global SearchItem*/
+    /*global window*/
     var SearchBox = function (el, opts) {
         "use strict";
     
@@ -244,18 +250,52 @@
                     getNode('body').css('display', 'block');
                     getNode('footer').css('display', 'block');
     
-                    var searchSettings = $.getParam('search');
+                    var searchSettings = $.getParam('search'),
+                        id,
+                        item;
     
-                    for (var id in searchSettings) {
-                        if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
-                            var item = new SearchItem(obj, id, settings.params[id]);
-                            item.setChecked(true);
-                            item.setOperator(searchSettings[id].operator);
-                            item.setValues(searchSettings[id].values);
+                    for (id in searchSettings) {
+                        if (searchSettings.hasOwnProperty(id)) {
+                            if (searchSettings[id].search > 0 && Object.keys(settings.params).indexOf(id) > -1) {
+                                item = new SearchItem(obj, id, settings.params[id]);
+                                item.setChecked(true);
+                                item.setOperator(searchSettings[id].operator);
+                                item.setValues(searchSettings[id].values);
+                            }
                         }
                     }
                 }
-                ;
+            },
+    
+            submitHandler = function (e) {
+                e.preventDefault();
+    
+                var $target = $(e.currentTarget);
+    
+                $.ajax({
+                    url: getNode('form').attr('action'),
+                    type: 'get',
+                    data: $target.serializeArray(),
+                    dataType: 'json',
+                    success: function (data, status, xhr) {
+                        if (undefined !== settings.events.onSuccess) {
+                            settings.events.onSuccess.call(this, data, status, xhr);
+                        }
+                    }
+                });
+    
+                return false;
+            },
+    
+            searchItemSelectorHandler = function (e) {
+                var $target = $(e.currentTarget),
+                    id = $target.val(),
+                    item;
+    
+                if (undefined === items[id]) {
+                    item = new SearchItem(obj, id, settings.params[id]);
+                    item.setChecked(true);
+                }
             },
     
             init = function () {
@@ -266,7 +306,7 @@
         //                getNode('footer').css('display','block');
         //            }
     
-                if ('undefined' === typeof (settings.params) && 'undefined' !== typeof (window.searchBoxParams)) {
+                if (undefined === settings.params && undefined !== window.searchBoxParams) {
                     var input = JSON.parse(window.searchBoxParams);
                     settings.params = input.params;
                     settings.url = input.url;
@@ -274,7 +314,7 @@
                     settings.itemLabels = input.fieldLabels;
                 }
     
-                if ('undefined' !== typeof (settings.params)) {
+                if (undefined !== settings.params) {
                     getNode('searchItemSelector')
                             .append(SearchBox.getTemplate('selectOptionsLayout', [{'cls': '', 'name': '', 'options': settings.params}, settings.itemLabels]));
                     getNode('searchItemSelector').on('change', searchItemSelectorHandler);
@@ -287,39 +327,7 @@
                     getNode('form').submit(submitHandler);
                 }
     
-            },
-    
-    
-        submitHandler = function (e) {
-            e.preventDefault();
-    
-            var $target = $(e.currentTarget);
-    
-            $.ajax({
-                url: getNode('form').attr('action'),
-                type: 'get',
-                data: $target.serializeArray(),
-                dataType: 'json',
-                success: function (data, status, xhr) {
-                    if ('undefined' != settings.events.onSuccess) {
-                        settings.events.onSuccess.call(this, data, status, xhr);
-                    }
-                }
-            });
-    
-            return false;
-        },
-    
-        searchItemSelectorHandler = function (e) {
-            var $target = $(e.currentTarget);
-    
-            var id = $target.val();
-    
-            if ("undefined" === typeof (items[id])) {
-                var item = new SearchItem(obj, id, settings.params[id]);
-                item.setChecked(true);
-            }
-        };
+            };
     
         this.getSettings = function (key) {
             if (['itemOperators', 'itemLabels'].indexOf(key) > -1) {
@@ -335,7 +343,7 @@
     
         this.addItem = function (item) {
             getNode('body').append(item.getElement());
-            items[ item.getId() ] = item;
+            items[item.getId()] = item;
             getNode('searchItemSelector').children('[value="' + item.getId() + '"]').attr('disabled', true);
         };
     
@@ -344,13 +352,18 @@
     };
     
     SearchBox.getTemplate = function (item, params) {
+        "use strict";
+    
         var tpl = {};
     
         tpl.selectOptionsLayout = function (params, labels) {
-            var xhtml = '';
+            var xhtml = '',
+                i;
     
-            for (var i in params.options) {
-                xhtml += '<option value="' + i + '">' + (labels[i] || i) + '</option>';
+            for (i in params.options) {
+                if (params.options.hasOwnProperty(i)) {
+                    xhtml += '<option value="' + i + '">' + (labels[i] || i) + '</option>';
+                }
             }
     
             return xhtml;
@@ -373,51 +386,63 @@
     };
 
 })(jQuery);
+/*jslint indent: 4, maxerr: 500, vars: true, regexp: true, sloppy: true */
+/*global document*/
+/*global decodeURI*/
+/*global jQuery*/
 (function ($) {
     "use strict";
 
     $.getParams = function () {
-        var params = Object.create(null);
+        var params = Object.create(null),
+            i,
+            searchParams = document.location.search.substr(1),
+            arrSearchParams,
+            param,
+            realIdx,
 
-        var setParam = function (params, paramIndexes, value) {
-            var realParam = paramIndexes.shift();
-            var cleanedParam = realParam.match(/\[(.*?)\]/)[1];
+            setParam = function (params, paramIndexes, value) {
+                var realParam = paramIndexes.shift(),
+                    cleanedParam;
 
-            if ("undefined" === typeof (params[cleanedParam])) {
-                params[cleanedParam] = [];
-            }
+                cleanedParam = realParam.match(/\[(.*?)\]/)[1];
 
-            if (paramIndexes.length > 0) {
-                setParam(params[cleanedParam], paramIndexes, value);
-            } else {
-
-                if (realParam === '[]') {
-                    params.push(value);
-                } else {
-                    params[cleanedParam] = value;
+                if (undefined === params[cleanedParam]) {
+                    params[cleanedParam] = [];
                 }
-            }
 
-        };
+                if (paramIndexes.length > 0) {
+                    setParam(params[cleanedParam], paramIndexes, value);
+                } else {
 
-        var searchParams = document.location.search.substr(1);
-        var arrSearchParams = decodeURI(searchParams).split('&');
+                    if (realParam === '[]') {
+                        params.push(value);
+                    } else {
+                        params[cleanedParam] = value;
+                    }
+                }
+
+            };
+
+        arrSearchParams = decodeURI(searchParams).split('&');
 
         if (searchParams.length < 1 || arrSearchParams.length < 1) {
             return params;
         }
 
-        for (var i in arrSearchParams) {
-            var param = arrSearchParams[i].split('=');
-            var realIdx = param[0].replace(/\[.*?\]/g, '');
+        for (i in arrSearchParams) {
+            if (arrSearchParams.hasOwnProperty(i)) {
+                param = arrSearchParams[i].split('=');
+                realIdx = param[0].replace(/\[.*?\]/g, '');
 
-            if (param[0].search(/\[(.*?)\]/g) > -1) {
-                if ("undefined" === typeof (params[realIdx])) {
-                    params[realIdx] = [];
+                if (param[0].search(/\[(.*?)\]/g) > -1) {
+                    if (undefined === params[realIdx]) {
+                        params[realIdx] = [];
+                    }
+                    setParam(params[realIdx], param[0].match(/\[(.*?)\]/g), decodeURIComponent(param[1]));
+                } else {
+                    params[param[0]] = decodeURIComponent(param[1]);
                 }
-                setParam(params[realIdx], param[0].match(/\[(.*?)\]/g), decodeURIComponent(param[1]));
-            } else {
-                params[ param[0] ] = decodeURIComponent(param[1]);
             }
         }
 
@@ -427,7 +452,7 @@
     $.hasParam = function (paramName) {
         var params = $.getParams();
 
-        return "undefined" !== typeof (params[paramName]);
+        return undefined !== params[paramName];
     };
 
     $.getParam = function (paramName) {
