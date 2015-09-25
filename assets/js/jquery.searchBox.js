@@ -138,14 +138,18 @@
          * @returns {undefined}
          */
         this.setValues = function (values) {
+            window.console.log(values);
             if ('list' === params.type && values.length > 1) {
                 expandValuesList(true);
+                getNode('filterVal1').val(values);
+            } else {
+                getNode('filterVal1').val(values[0]);
+                if (values.length > 1) {
+                    getNode('filterVal2').val(values[1]);
+                }
             }
+            
     
-            getNode('filterVal1').val(values[0]);
-            if (values.length > 1) {
-                getNode('filterVal2').val(values[1]);
-            }
         };
     
         /**
