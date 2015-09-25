@@ -1,9 +1,22 @@
 /*global $*/
+/**
+ * Handles search item mechanizm in search box plugin
+ * @param {Object} context The search box reference
+ * @param {String} id Search item identifier
+ * @param {Array} params Search Item params
+ * @returns {SearchItem}
+ */
 var SearchItem = function (context, id, params) {
     "use strict";
 
     var $el,
         obj = this,
+
+        /**
+         * Register and get node references
+         * @param {String} nodeId
+         * @returns {$} Node reference
+         */
         getNode = function (nodeId) {
             switch (nodeId) {
             case 'operatorSelect':
@@ -22,6 +35,12 @@ var SearchItem = function (context, id, params) {
                 return $('input.icheck', $el);
             }
         },
+
+        /**
+         * Handle operator select box 'change' event
+         * @param {Object} e Event object
+         * @returns {undefined}
+         */
         operatorHandler = function (e) {
             var $target = $(e.currentTarget);
 
@@ -40,6 +59,11 @@ var SearchItem = function (context, id, params) {
                 break;
             }
         },
+
+        /**
+         * Handle toggle button between single and multiple state
+         * @returns {undefined}
+         */
         toggleBtnHandler = function () {
             var $variablesList = getNode('filterVal1');
             if ($variablesList.is("[multiple]")) {
@@ -52,6 +76,11 @@ var SearchItem = function (context, id, params) {
                         .children().removeClass('fa-plus').addClass('fa-minus');
             }
         },
+
+        /**
+         * Init the SearchItem object
+         * @returns {undefined}
+         */
         init = function () {
             $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('itemLabels'), context.getSettings('itemOperators')]));
             context.addItem(obj);
@@ -65,20 +94,37 @@ var SearchItem = function (context, id, params) {
             getNode('operatorSelect').change();
         };
 
-
+    /**
+     * Get the search item element node reference
+     * @returns {SearchItem.$el|$}
+     */
     this.getElement = function () {
         return $el;
     };
 
+    /**
+     * Get the identifier of the SearchItem
+     * @returns {String}
+     */
     this.getId = function () {
         return id;
     };
 
+    /**
+     * Sets the operator selecttion box
+     * @param {String} operatorId
+     * @returns {undefined}
+     */
     this.setOperator = function (operatorId) {
         getNode('operatorSelect').children('[value="' + operatorId + '"]')
                 .prop('selected', 'selected').trigger('change');
     };
 
+    /**
+     * Sets the values
+     * @param {Array} values
+     * @returns {undefined}
+     */
     this.setValues = function (values) {
         getNode('filterVal1').val(values[0]);
         if (values.length > 1) {
@@ -86,6 +132,11 @@ var SearchItem = function (context, id, params) {
         }
     };
 
+    /**
+     * Sets the visibility
+     * @param {Boolean} isVisisble
+     * @returns {undefined}
+     */
     this.setVisible = function (isVisisble) {
         if (isVisisble) {
             $el.removeClass('hidden');
@@ -94,6 +145,11 @@ var SearchItem = function (context, id, params) {
         }
     };
 
+    /**
+     * Set checked state
+     * @param {Boolean} isChecked
+     * @returns {undefined}
+     */
     this.setChecked = function (isChecked) {
         if (isChecked) {
             getNode('checkBox').iCheck('check');
@@ -102,16 +158,28 @@ var SearchItem = function (context, id, params) {
         }
     };
 
-    //======================================================================
-
     init();
 };
 
+/**
+ * SearchItem templace container
+ * @param {String} item
+ * @param {Object} params
+ * @returns {String} Template string literal
+ */
 SearchItem.getTemplate = function (item, params) {
     "use strict";
 
     var tpl = {};
 
+    /**
+     * Get the full layout of the search item
+     * @param {String} id
+     * @param {Object} params
+     * @param {Array} labels
+     * @param {Object} operators
+     * @returns {String} The layout string literal
+     */
     tpl.layout = function (id, params, labels, operators) {
         var xhtml = '<div class="row">';
         xhtml += SearchItem.getTemplate('checkboxLayout', [id]);
@@ -122,6 +190,12 @@ SearchItem.getTemplate = function (item, params) {
         return xhtml;
     };
 
+    /**
+     * Get values template
+     * @param {String} id
+     * @param {Object} params
+     * @returns {String}
+     */
     tpl.valuesLayout = function (id, params) {
         var xhtml = '',
             i;
@@ -166,6 +240,13 @@ SearchItem.getTemplate = function (item, params) {
         return xhtml;
     };
 
+    /**
+     * Get operator list selection box template
+     * @param {String} id
+     * @param {Object} params
+     * @param {Object} operators
+     * @returns {String}
+     */
     tpl.operatorListLayout = function (id, params, operators) {
         var xhtml,
             i;
@@ -186,12 +267,23 @@ SearchItem.getTemplate = function (item, params) {
         return xhtml;
     };
 
+    /**
+     * Get label layout
+     * @param {String} id
+     * @param {Array} labels
+     * @returns {String}
+     */
     tpl.labelLayout = function (id, labels) {
         return '<div class="form-group col-md-2">' +
                 '<label>' + (labels[id] || id) + '</label>' +
                 '</div>';
     };
 
+    /**
+     * Get checkbox layout
+     * @param {String} id
+     * @returns {String}
+     */
     tpl.checkboxLayout = function (id) {
         return '<div class="form-group col-md-1 text-center">' +
                 '<input type="checkbox" class="icheck" name="search[' + id + '][search]" value="1" />' +
@@ -201,6 +293,9 @@ SearchItem.getTemplate = function (item, params) {
     return tpl[item].apply(this, params);
 };
 
+/**
+ * SearchItem operator container
+ */
 SearchItem.operatorByType = {
     'integer': ["=", "!=", ">=", "<=", "><"],
     'date': ["=", ">=", "<=", "><"],

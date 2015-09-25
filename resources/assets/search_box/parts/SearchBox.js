@@ -1,6 +1,12 @@
 /*global $*/
 /*global SearchItem*/
 /*global window*/
+/**
+ * Searchbox mechanizm
+ * @param {Object} el The jQuery node reference
+ * @param {Object} opts Pass options from plugin
+ * @returns {SearchBox}
+ */
 var SearchBox = function (el, opts) {
     "use strict";
 
@@ -11,6 +17,11 @@ var SearchBox = function (el, opts) {
         }, opts || {}),
         items = [],
 
+        /**
+         * Register and get node references
+         * @param {string} nodeId Node identifier
+         * @returns {$} jQuery node reference
+         */
         getNode = function (nodeId) {
             switch (nodeId) {
             case 'body':
@@ -30,6 +41,10 @@ var SearchBox = function (el, opts) {
             }
         },
 
+        /**
+         * Initialize the plugin after loaded
+         * @returns {undefined}
+         */
         setInitialState = function () {
             if ($.hasParam('search')) {
                 $el.removeClass('collapsed-box');
@@ -53,6 +68,11 @@ var SearchBox = function (el, opts) {
             }
         },
 
+        /**
+         * Handle submit button 'submit' event
+         * @param {object} e Event object
+         * @returns {Boolean}
+         */
         submitHandler = function (e) {
             e.preventDefault();
 
@@ -73,6 +93,11 @@ var SearchBox = function (el, opts) {
             return false;
         },
 
+        /**
+         * Handle search item selector 'change' event
+         * @param {object} e Event object
+         * @returns {undefined}
+         */
         searchItemSelectorHandler = function (e) {
             var $target = $(e.currentTarget),
                 id = $target.val(),
@@ -84,14 +109,11 @@ var SearchBox = function (el, opts) {
             }
         },
 
+        /**
+         * Initalize the object
+         * @returns {undefined}
+         */
         init = function () {
-
-    //            if( $.hasParam('search') ){
-    //                $el.removeClass('collapsed-box');
-    //                getNode('body').css('display','block');
-    //                getNode('footer').css('display','block');
-    //            }
-
             if (undefined === settings.params && undefined !== window.searchBoxParams) {
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
@@ -115,6 +137,11 @@ var SearchBox = function (el, opts) {
 
         };
 
+    /**
+     * Get setting
+     * @param {string} key
+     * @returns {null|SearchBox.settings}
+     */
     this.getSettings = function (key) {
         if (['itemOperators', 'itemLabels'].indexOf(key) > -1) {
             return settings[key];
@@ -123,6 +150,11 @@ var SearchBox = function (el, opts) {
         return null;
     };
 
+    /**
+     * Get search item
+     * @param {string} itemId
+     * @returns {item}
+     */
     this.getItem = function (itemId) {
         return items[itemId];
     };
@@ -137,6 +169,12 @@ var SearchBox = function (el, opts) {
     init();
 };
 
+/**
+ * Searchbox template container
+ * @param {string} item
+ * @param {array} params
+ * @returns {string} The template string literal
+ */
 SearchBox.getTemplate = function (item, params) {
     "use strict";
 

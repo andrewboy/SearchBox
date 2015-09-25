@@ -2,11 +2,24 @@
 (function ($) {
     "use strict";
     /*global $*/
+    /**
+     * Handles search item mechanizm in search box plugin
+     * @param {Object} context The search box reference
+     * @param {String} id Search item identifier
+     * @param {Array} params Search Item params
+     * @returns {SearchItem}
+     */
     var SearchItem = function (context, id, params) {
         "use strict";
     
         var $el,
             obj = this,
+    
+            /**
+             * Register and get node references
+             * @param {String} nodeId
+             * @returns {$} Node reference
+             */
             getNode = function (nodeId) {
                 switch (nodeId) {
                 case 'operatorSelect':
@@ -25,6 +38,12 @@
                     return $('input.icheck', $el);
                 }
             },
+    
+            /**
+             * Handle operator select box 'change' event
+             * @param {Object} e Event object
+             * @returns {undefined}
+             */
             operatorHandler = function (e) {
                 var $target = $(e.currentTarget);
     
@@ -43,6 +62,11 @@
                     break;
                 }
             },
+    
+            /**
+             * Handle toggle button between single and multiple state
+             * @returns {undefined}
+             */
             toggleBtnHandler = function () {
                 var $variablesList = getNode('filterVal1');
                 if ($variablesList.is("[multiple]")) {
@@ -55,6 +79,11 @@
                             .children().removeClass('fa-plus').addClass('fa-minus');
                 }
             },
+    
+            /**
+             * Init the SearchItem object
+             * @returns {undefined}
+             */
             init = function () {
                 $el = $(SearchItem.getTemplate('layout', [id, params, context.getSettings('itemLabels'), context.getSettings('itemOperators')]));
                 context.addItem(obj);
@@ -68,20 +97,37 @@
                 getNode('operatorSelect').change();
             };
     
-    
+        /**
+         * Get the search item element node reference
+         * @returns {SearchItem.$el|$}
+         */
         this.getElement = function () {
             return $el;
         };
     
+        /**
+         * Get the identifier of the SearchItem
+         * @returns {String}
+         */
         this.getId = function () {
             return id;
         };
     
+        /**
+         * Sets the operator selecttion box
+         * @param {String} operatorId
+         * @returns {undefined}
+         */
         this.setOperator = function (operatorId) {
             getNode('operatorSelect').children('[value="' + operatorId + '"]')
                     .prop('selected', 'selected').trigger('change');
         };
     
+        /**
+         * Sets the values
+         * @param {Array} values
+         * @returns {undefined}
+         */
         this.setValues = function (values) {
             getNode('filterVal1').val(values[0]);
             if (values.length > 1) {
@@ -89,6 +135,11 @@
             }
         };
     
+        /**
+         * Sets the visibility
+         * @param {Boolean} isVisisble
+         * @returns {undefined}
+         */
         this.setVisible = function (isVisisble) {
             if (isVisisble) {
                 $el.removeClass('hidden');
@@ -97,6 +148,11 @@
             }
         };
     
+        /**
+         * Set checked state
+         * @param {Boolean} isChecked
+         * @returns {undefined}
+         */
         this.setChecked = function (isChecked) {
             if (isChecked) {
                 getNode('checkBox').iCheck('check');
@@ -105,16 +161,28 @@
             }
         };
     
-        //======================================================================
-    
         init();
     };
     
+    /**
+     * SearchItem templace container
+     * @param {String} item
+     * @param {Object} params
+     * @returns {String} Template string literal
+     */
     SearchItem.getTemplate = function (item, params) {
         "use strict";
     
         var tpl = {};
     
+        /**
+         * Get the full layout of the search item
+         * @param {String} id
+         * @param {Object} params
+         * @param {Array} labels
+         * @param {Object} operators
+         * @returns {String} The layout string literal
+         */
         tpl.layout = function (id, params, labels, operators) {
             var xhtml = '<div class="row">';
             xhtml += SearchItem.getTemplate('checkboxLayout', [id]);
@@ -125,6 +193,12 @@
             return xhtml;
         };
     
+        /**
+         * Get values template
+         * @param {String} id
+         * @param {Object} params
+         * @returns {String}
+         */
         tpl.valuesLayout = function (id, params) {
             var xhtml = '',
                 i;
@@ -169,6 +243,13 @@
             return xhtml;
         };
     
+        /**
+         * Get operator list selection box template
+         * @param {String} id
+         * @param {Object} params
+         * @param {Object} operators
+         * @returns {String}
+         */
         tpl.operatorListLayout = function (id, params, operators) {
             var xhtml,
                 i;
@@ -189,12 +270,23 @@
             return xhtml;
         };
     
+        /**
+         * Get label layout
+         * @param {String} id
+         * @param {Array} labels
+         * @returns {String}
+         */
         tpl.labelLayout = function (id, labels) {
             return '<div class="form-group col-md-2">' +
                     '<label>' + (labels[id] || id) + '</label>' +
                     '</div>';
         };
     
+        /**
+         * Get checkbox layout
+         * @param {String} id
+         * @returns {String}
+         */
         tpl.checkboxLayout = function (id) {
             return '<div class="form-group col-md-1 text-center">' +
                     '<input type="checkbox" class="icheck" name="search[' + id + '][search]" value="1" />' +
@@ -204,6 +296,9 @@
         return tpl[item].apply(this, params);
     };
     
+    /**
+     * SearchItem operator container
+     */
     SearchItem.operatorByType = {
         'integer': ["=", "!=", ">=", "<=", "><"],
         'date': ["=", ">=", "<=", "><"],
@@ -215,6 +310,12 @@
     /*global $*/
     /*global SearchItem*/
     /*global window*/
+    /**
+     * Searchbox mechanizm
+     * @param {Object} el The jQuery node reference
+     * @param {Object} opts Pass options from plugin
+     * @returns {SearchBox}
+     */
     var SearchBox = function (el, opts) {
         "use strict";
     
@@ -225,6 +326,11 @@
             }, opts || {}),
             items = [],
     
+            /**
+             * Register and get node references
+             * @param {string} nodeId Node identifier
+             * @returns {$} jQuery node reference
+             */
             getNode = function (nodeId) {
                 switch (nodeId) {
                 case 'body':
@@ -244,6 +350,10 @@
                 }
             },
     
+            /**
+             * Initialize the plugin after loaded
+             * @returns {undefined}
+             */
             setInitialState = function () {
                 if ($.hasParam('search')) {
                     $el.removeClass('collapsed-box');
@@ -267,6 +377,11 @@
                 }
             },
     
+            /**
+             * Handle submit button 'submit' event
+             * @param {object} e Event object
+             * @returns {Boolean}
+             */
             submitHandler = function (e) {
                 e.preventDefault();
     
@@ -287,6 +402,11 @@
                 return false;
             },
     
+            /**
+             * Handle search item selector 'change' event
+             * @param {object} e Event object
+             * @returns {undefined}
+             */
             searchItemSelectorHandler = function (e) {
                 var $target = $(e.currentTarget),
                     id = $target.val(),
@@ -298,14 +418,11 @@
                 }
             },
     
+            /**
+             * Initalize the object
+             * @returns {undefined}
+             */
             init = function () {
-    
-        //            if( $.hasParam('search') ){
-        //                $el.removeClass('collapsed-box');
-        //                getNode('body').css('display','block');
-        //                getNode('footer').css('display','block');
-        //            }
-    
                 if (undefined === settings.params && undefined !== window.searchBoxParams) {
                     var input = JSON.parse(window.searchBoxParams);
                     settings.params = input.params;
@@ -329,6 +446,11 @@
     
             };
     
+        /**
+         * Get setting
+         * @param {string} key
+         * @returns {null|SearchBox.settings}
+         */
         this.getSettings = function (key) {
             if (['itemOperators', 'itemLabels'].indexOf(key) > -1) {
                 return settings[key];
@@ -337,6 +459,11 @@
             return null;
         };
     
+        /**
+         * Get search item
+         * @param {string} itemId
+         * @returns {item}
+         */
         this.getItem = function (itemId) {
             return items[itemId];
         };
@@ -351,6 +478,12 @@
         init();
     };
     
+    /**
+     * Searchbox template container
+     * @param {string} item
+     * @param {array} params
+     * @returns {string} The template string literal
+     */
     SearchBox.getTemplate = function (item, params) {
         "use strict";
     
@@ -390,9 +523,18 @@
 /*global document*/
 /*global decodeURI*/
 /*global jQuery*/
+/**
+ * Handles the URL parameters
+ * @param {Object} $ jQuery object
+ * @returns {undefined}
+ */
 (function ($) {
     "use strict";
 
+    /**
+     * Get all params from the URL
+     * @returns {Object|Array}
+     */
     $.getParams = function () {
         var params = Object.create(null),
             i,
@@ -449,12 +591,22 @@
         return params;
     };
 
+    /**
+     * Check URL parameter exists or not
+     * @param {String} paramName
+     * @returns {Boolean}
+     */
     $.hasParam = function (paramName) {
         var params = $.getParams();
 
         return undefined !== params[paramName];
     };
 
+    /**
+     * Get selected parameter from URL
+     * @param {String} paramName
+     * @returns {jquery.urlParam_L10.$.getParam.params|Array|Object|Object.getParams.params}
+     */
     $.getParam = function (paramName) {
         var params = $.getParams();
 

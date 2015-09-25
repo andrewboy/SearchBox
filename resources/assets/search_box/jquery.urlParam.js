@@ -2,9 +2,18 @@
 /*global document*/
 /*global decodeURI*/
 /*global jQuery*/
+/**
+ * Handles the URL parameters
+ * @param {Object} $ jQuery object
+ * @returns {undefined}
+ */
 (function ($) {
     "use strict";
 
+    /**
+     * Get all params from the URL
+     * @returns {Object|Array}
+     */
     $.getParams = function () {
         var params = Object.create(null),
             i,
@@ -61,12 +70,22 @@
         return params;
     };
 
+    /**
+     * Check URL parameter exists or not
+     * @param {String} paramName
+     * @returns {Boolean}
+     */
     $.hasParam = function (paramName) {
         var params = $.getParams();
 
         return undefined !== params[paramName];
     };
 
+    /**
+     * Get selected parameter from URL
+     * @param {String} paramName
+     * @returns {jquery.urlParam_L10.$.getParam.params|Array|Object|Object.getParams.params}
+     */
     $.getParam = function (paramName) {
         var params = $.getParams();
 
