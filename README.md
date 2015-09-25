@@ -177,4 +177,13 @@ to insert the view
 @include('search-box::searchBox')
 ```
 
+## Filters
+
+### Integer
+
+### Date
+### String
+### Boolean
+### List
+
 write down how to publish the parts of the code etc.
