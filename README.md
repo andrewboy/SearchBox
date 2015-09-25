@@ -52,7 +52,11 @@ $('.searchbox').searchBox();
 
 You have two choice to pass the search params
 
-### 1. Just create the 'searchParams' php variable
+### 1. Just create the 'searchParams' php variable in the controller and pass it to the view 
+
+```bash
+Explained in the controller section
+```
 
 ### 2. You can pass the parameters through the plugin
 
