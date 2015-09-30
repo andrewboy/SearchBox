@@ -214,7 +214,8 @@ trait SearchTrait
                 'url' => $url,
                 'params' => $searchParams,
                 'operators' => trans('search-box::operators'),
-                'fieldLabels' => trans('search-box::field_names.' . __CLASS__) || []
+                'fieldLabels' => is_array(trans('search-box::field_names.' . __CLASS__))
+                    ? trans('search-box::field_names.' . __CLASS__) : []
             ]
         );
     }
