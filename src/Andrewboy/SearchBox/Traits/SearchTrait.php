@@ -202,8 +202,17 @@ trait SearchTrait
                         $searchParams[$id]['values'] = $searchItem['values'];
                     }
                 } else {
-                    if (self::isValidSearchParam($searchItem)) {
-                        $searchParams[$id] = $searchItem;
+                    if (array_key_exists('type', $searchItem)
+                    && is_string($searchItem['type'])
+                    && strlen($searchItem['type']) > 0) {
+                        $validSearchItem = [];
+                        $validSearchItem['type'] = $searchItem['type'];
+                        
+                        if (array_key_exists('values', $searchItem)) {
+                            $validSearchItem['values'] = $searchItem['values'];
+                        }
+                        
+                        $searchParams[$id] = $validSearchItem;
                     }
                 }
             }
