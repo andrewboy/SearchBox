@@ -10,8 +10,6 @@
     </div>
 
     <form action="" role="form">
-        <input type="hidden" value="25" name="size">
-        <input type="hidden" value="1" name="actual">
         <div style="display: none;" class="box-body">
             
         </div>
