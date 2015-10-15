@@ -227,7 +227,7 @@ SearchItem.getTemplate = function (item, params) {
 
         if (params.type === 'list') {
 
-            xhtml += '<div class="form-group col-md-2">';
+            xhtml += '<div class="form-group col-md-4">';
             xhtml += '<select name="search[' + id + '][values][]" class="form-control input-block-level filter-value-1" size="1">';
 
             for (i in params.values) {
@@ -247,12 +247,12 @@ SearchItem.getTemplate = function (item, params) {
 
         } else {
 
-            xhtml += '<div class="form-group col-md-2">' +
+            xhtml += '<div class="form-group col-md-4">' +
                     '<input type="text" value="" name="search[' + id + '][values][]" placeholder="" class="form-control filter-value-1" ' + (params.type === 'date' ? 'data-provide="datepicker" data-date-format="yyyy-mm-dd"' : '') + ' />' +
                     '</div>';
 
             if (['date', 'integer'].indexOf(params.type) > -1) {
-                xhtml += '<div class="form-group col-md-2">' +
+                xhtml += '<div class="form-group col-md-4">' +
                         '<input type="text" value="" name="search[' + id + '][values][]" placeholder="" class="form-control filter-value-2" ' + (params.type === 'date' ? 'data-provide="datepicker"  data-date-format="yyyy-mm-dd"' : '') + ' />' +
                         '</div>';
             }
