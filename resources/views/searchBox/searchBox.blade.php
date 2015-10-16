@@ -10,10 +10,10 @@
     </div>
 
     <form action="" role="form">
-        <div style="display: none;" class="box-body">
+        <div class="box-body">
             
         </div>
-        <div style="display: none;" class="box-footer">
+        <div class="box-footer">
             <div class="form-group col-md-1">
                 <label for="searchbox-item-selector">{{trans('search-box::search_box.searchItemSelectorLabel')}}</label>
             </div>

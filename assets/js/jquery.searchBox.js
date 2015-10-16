@@ -383,8 +383,6 @@
             setInitialState = function () {
                 if ($.hasParam('search')) {
                     $el.removeClass('collapsed-box');
-                    getNode('body').css('display', 'block');
-                    getNode('footer').css('display', 'block');
     
                     var searchSettings = $.getParam('search'),
                         id,
