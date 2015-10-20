@@ -184,7 +184,8 @@ trait SearchTrait
         #SET DEFAULT SETTINGS FROM THE MODEL
         foreach (static::$searchParams as $id => $searchParam) {
             $searchParams[$id] = $searchParam;
-            if ('list' === $searchParam['type']) {
+            if ('list' === $searchParam['type'] && array_key_exists('relation', $searchParam)
+            && is_array($searchParam['relation'])) {
                 $self = new self;
                 $relationClass = get_class(
                     $self->{$searchParam['relation'][0]}()->getRelated()
