@@ -108,13 +108,37 @@ trait SearchTrait
      */
     protected function setStringSearchQuery($query, $key, array $values)
     {
+        $value = $values['values'][0];
+        
         switch ($values['operator']) {
             case '~':
-                $query->where($key, 'LIKE', "%{$values['values'][0]}%");
+                if (isset(static::$searchParams[$key]['relation'])) {
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($key, $value) {
+                            $q->where($key, 'LIKE', "%{$value}%");
+                        },
+                        '>',
+                        0
+                    );
+                } else {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
                 break;
 
             case '!~':
-                $query->where($key, 'NOT LIKE', "%{$values['values'][0]}%");
+                if (isset(static::$searchParams[$key]['relation'])) {
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($key, $value) {
+                            $q->where($key, 'NOT LIKE', "%{$value}%");
+                        },
+                        '>',
+                        0
+                    );
+                } else {
+                    $query->where($key, 'NOT LIKE', "%{$value}%");
+                }
                 break;
         }
     }
@@ -165,7 +189,9 @@ trait SearchTrait
                     static::$searchParams[$key]['relation'][0],
                     function ($q) use ($ids) {
                         $q->whereNotIn('id', $ids);
-                    }
+                    },
+                    '>',
+                    0
                 );
                 break;
         }
