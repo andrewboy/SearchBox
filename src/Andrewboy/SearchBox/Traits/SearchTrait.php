@@ -113,13 +113,12 @@ trait SearchTrait
         switch ($values['operator']) {
             case '~':
                 if (isset(static::$searchParams[$key]['relation'])) {
+                    $relationKey = static::$searchParams[$key]['relation'][1];
                     $query->whereHas(
                         static::$searchParams[$key]['relation'][0],
-                        function ($q) use ($key, $value) {
-                            $q->where($key, 'LIKE', "%{$value}%");
-                        },
-                        '>',
-                        0
+                        function ($q) use ($relationKey, $value) {
+                            $q->where($relationKey, 'LIKE', "%{$value}%");
+                        }
                     );
                 } else {
                     $query->where($key, 'LIKE', "%{$value}%");
@@ -128,13 +127,12 @@ trait SearchTrait
 
             case '!~':
                 if (isset(static::$searchParams[$key]['relation'])) {
+                    $relationKey = static::$searchParams[$key]['relation'][1];
                     $query->whereHas(
                         static::$searchParams[$key]['relation'][0],
-                        function ($q) use ($key, $value) {
-                            $q->where($key, 'NOT LIKE', "%{$value}%");
-                        },
-                        '>',
-                        0
+                        function ($q) use ($relationKey, $value) {
+                            $q->where($relationKey, 'NOT LIKE', "%{$value}%");
+                        }
                     );
                 } else {
                     $query->where($key, 'NOT LIKE', "%{$value}%");
@@ -177,9 +175,7 @@ trait SearchTrait
                     static::$searchParams[$key]['relation'][0],
                     function ($q) use ($ids) {
                         $q->whereIn('id', $ids);
-                    },
-                    '>',
-                    0
+                    }
                 );
                 break;
 
@@ -189,9 +185,7 @@ trait SearchTrait
                     static::$searchParams[$key]['relation'][0],
                     function ($q) use ($ids) {
                         $q->whereNotIn('id', $ids);
-                    },
-                    '>',
-                    0
+                    }
                 );
                 break;
         }
