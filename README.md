@@ -103,15 +103,14 @@ protected static $searchParams = [
         'relation'  =>  ['groups', 'name']
     ],
     'group_id'    =>  [
+        'type'  =>  'list',
+        'values'  =>  [
+            1 => 'name1',
+            2 => 'name2'
+        ]
+    ],
+    'group_id'    =>  [
         'type'  =>  'string',
-        'values'  =>  ['name1', 'name2']
-    ],
-    'group_id'    =>  [
-        'type'  =>  'list',
-        'values'  =>  ['name1', 'name2']
-    ],
-    'group_id'    =>  [
-        'type'  =>  'list',
         'relation'  =>  ['groups', 'name']
     ],
     'created_at' => [
