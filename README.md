@@ -111,7 +111,7 @@ protected static $searchParams = [
 in the model, extend the search for special cases
 
 ```bash
-protected function extendSearch(&$query, array &$params)
+protected function extendSearch($query, array $params)
 {
     #BANNER_PLACE_ID
     if (isset($params['banner_place_id']) && self::isValidSearchParam($params['banner_place_id'])) {
@@ -142,6 +142,8 @@ protected function extendSearch(&$query, array &$params)
 
         unset($params['has_attachment']);
     }
+
+    return $params;
 }
 ```
 

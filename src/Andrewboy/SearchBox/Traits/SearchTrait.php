@@ -11,7 +11,7 @@ trait SearchTrait
     public function scopeSearch($query, array $params)
     {
         if (isset($params['search'])) {
-            $this->extendSearch($query, $params['search']);
+            $params['search'] = $this->extendSearch($query, $params['search']);
 
             foreach ($params['search'] as $id => $values) {
                 if (false !== $id
@@ -47,9 +47,9 @@ trait SearchTrait
      * @param Builder $query
      * @param array $params
      */
-    protected function extendSearch(&$query, array &$params)
+    protected function extendSearch($query, array $params)
     {
-        //
+        return $params;
     }
 
     /**
