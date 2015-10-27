@@ -30,5 +30,7 @@ return [
     '!~' => 'not contains',
     '=p' => 'any issues in project',
     '=!p' => 'any issues not in project',
-    '!p' => 'no issues in project'
+    '!p' => 'no issues in project',
+    '!!1'   =>  'yes',
+    '!!0'   =>  'no',
 ];

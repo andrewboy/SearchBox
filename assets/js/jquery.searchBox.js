@@ -248,8 +248,11 @@
                         '</button>' +
                         '</div>';
     
+            } else if(params.type === 'boolean') {
+                xhtml += '<div class="form-group col-md-4">' +
+                        '<input type="hidden" value="1" name="search[' + id + '][values][]" />' +
+                        '</div>';
             } else {
-    
                 xhtml += '<div class="form-group col-md-4">' +
                         '<input type="text" value="" name="search[' + id + '][values][]" placeholder="" class="form-control filter-value-1" ' + (params.type === 'date' ? 'data-provide="datepicker" data-date-format="yyyy-mm-dd"' : '') + ' />' +
                         '</div>';
@@ -327,7 +330,7 @@
         'integer': ["=", "!=", ">=", "<=", "><"],
         'date': ["=", ">=", "<=", "><"],
         'string': ["~", "!~"],
-        'boolean': ["=", "!="],
+        'boolean': ["!!1", "!!0"],
         'list': ["=", "!="]
     };
     
