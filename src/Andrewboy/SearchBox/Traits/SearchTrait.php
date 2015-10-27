@@ -150,12 +150,12 @@ trait SearchTrait
     protected function setBooleanSearchQuery($query, $key, array $values)
     {
         switch ($values['operator']) {
-            case '=':
-                $query->where($key, 'LIKE', "{$values['values'][0]}");
+            case '!!1':
+                $query->where($key, 1);
                 break;
 
-            case '!=':
-                $query->where($key, 'NOT LIKE', "{$values['values'][0]}");
+            case '!!0':
+                $query->where($key, 0);
                 break;
         }
     }
