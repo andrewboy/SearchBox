@@ -246,7 +246,7 @@ Operators: contains (~), not contains (!~)
 
 ### Boolean
 
-Operators: equals (=), not equals (!=)
+Operators: true (!!1), false (!!0)
 
 ### List
 
