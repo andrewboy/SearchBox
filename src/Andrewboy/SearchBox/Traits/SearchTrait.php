@@ -60,17 +60,39 @@ trait SearchTrait
      */
     protected function setIntegerSearchQuery($query, $key, array $values)
     {
+        $arrValues = $values['values'];
+        $operator = $values['operator'];
+        
         switch ($values['operator']) {
             case '=':
             case '>=':
             case '<=':
             case '!=':
-                $query->where($key, $values['operator'], "{$values['values'][0]}");
+                if (isset(static::$searchParams[$key]['relation'])) {
+                    $relationKey = static::$searchParams[$key]['relation'][1];
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($relationKey, $operator, $arrValues) {
+                            $q->where($relationKey, $operator, "{$arrValues[0]}");
+                        }
+                    );
+                } else {
+                    $query->where($key, $operator, "{$arrValues[0]}");
+                }
                 break;
 
             case '><':
-                $query->where($key, '>', "{$values['values'][0]}")
-                    ->where($key, '<', "{$values['values'][1]}");
+                if (isset(static::$searchParams[$key]['relation'])) {
+                    $relationKey = static::$searchParams[$key]['relation'][1];
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($relationKey, $arrValues) {
+                            $q->whereBetween($relationKey, $arrValues);
+                        }
+                    );
+                } else {
+                    $query->whereBetween($key, $arrValues);
+                }
                 break;
         }
     }
@@ -181,14 +203,18 @@ trait SearchTrait
      */
     protected function setBooleanSearchQuery($query, $key, array $values)
     {
-        switch ($values['operator']) {
-            case '!!1':
-                $query->where($key, 1);
-                break;
-
-            case '!!0':
-                $query->where($key, 0);
-                break;
+        $opertor = $values['operator'];
+        
+        if (isset(static::$searchParams[$key]['relation'])) {
+            $relationKey = static::$searchParams[$key]['relation'][1];
+            $query->whereHas(
+                static::$searchParams[$key]['relation'][0],
+                function ($q) use ($relationKey, $opertor) {
+                    $q->where($relationKey, $opertor == '!!1');
+                }
+            );
+        } else {
+            $query->where($key, $opertor == '!!1');
         }
     }
 
