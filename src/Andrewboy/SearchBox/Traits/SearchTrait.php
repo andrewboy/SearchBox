@@ -83,19 +83,51 @@ trait SearchTrait
      */
     protected function setDateSearchQuery($query, $key, array $values)
     {
+        $arrValues = $values['values'];
+        
         switch ($values['operator']) {
             case '=':
-                $query->where($key, 'LIKE', "%{$values['values'][0]}%");
+                if (isset(static::$searchParams[$key]['relation'])) {
+                    $relationKey = static::$searchParams[$key]['relation'][1];
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($relationKey, $arrValues) {
+                            $q->where($relationKey, 'LIKE', "%{$arrValues[0]}%");
+                        }
+                    );
+                } else {
+                    $query->where($key, 'LIKE', "%{$values['values'][0]}%");
+                }
                 break;
 
             case '>=':
             case '<=':
-                $query->where($key, $values['operator'], "{$values['values'][0]}");
+                if (isset(static::$searchParams[$key]['relation'])) {
+                    $relationKey = static::$searchParams[$key]['relation'][1];
+                    $operator = $values['operator'];
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($relationKey, $operator, $arrValues) {
+                            $q->where($relationKey, $operator, "{$arrValues[0]}");
+                        }
+                    );
+                } else {
+                    $query->where($key, $values['operator'], "{$values['values'][0]}");
+                }
                 break;
 
             case '><':
-                $query->where($key, '>', "{$values['values'][0]}")
-                    ->where($key, '<', "{$values['values'][1]}");
+                if (isset(static::$searchParams[$key]['relation'])) {
+                    $relationKey = static::$searchParams[$key]['relation'][1];
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($relationKey, $arrValues) {
+                            $q->whereBetween($relationKey, $arrValues);
+                        }
+                    );
+                } else {
+                    $query->whereBetween($key, $arrValues);
+                }
                 break;
         }
     }
