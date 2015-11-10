@@ -13,7 +13,9 @@ var SearchBox = function (el, opts) {
     var $el = $(el),
         obj = this,
         settings = $.extend({
-            isJSON: false
+            isJSON: false,
+            itemBeforeInit: function(){},
+            itemAfterInit: function(item){}
         }, opts || {}),
         items = [],
 
@@ -104,8 +106,10 @@ var SearchBox = function (el, opts) {
                 item;
 
             if (undefined === items[id]) {
+                settings.itemBeforeInit.call(this);
                 item = new SearchItem(obj, id, settings.params[id]);
                 item.setChecked(true);
+                settings.itemAfterInit.call(this, item);
             }
         },
 
