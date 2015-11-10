@@ -50,6 +50,15 @@ add plugin to your javascript file
 $('.searchbox').searchBox();
 ```
 
+##Javascript events
+
+```bash
+$('.searchbox').searchBox({
+    itemBeforeInit(){},     //before search item init
+    itemAfterInit(item){}   //after search item init
+});
+```
+
 You have two choice to pass the search params
 
 ### 1. Just create the 'searchParams' php variable in the controller and pass it to the view 
@@ -111,7 +120,7 @@ protected static $searchParams = [
     ],
     'group_id'    =>  [
         'type'  =>  'string',
-        'relation'  =>  ['groups', 'name']
+        'relation'  =>  ['groups', 'name']  //search string through relation
     ],
     'created_at' => [
         'type' => 'date'
