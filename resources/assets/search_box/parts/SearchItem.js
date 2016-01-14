@@ -129,6 +129,10 @@ var SearchItem = function (context, id, params) {
         return id;
     };
     
+    /**
+     * Get the type of the SearchItem
+     * @returns {String}
+     */
     this.getType = function() {
         return JSON.parse( JSON.stringify( params.type ) );
     };
