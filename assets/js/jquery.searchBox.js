@@ -131,6 +131,10 @@
         this.getId = function () {
             return id;
         };
+        
+        this.getType = function() {
+            return JSON.parse( JSON.stringify( params.type ) );
+        };
     
         /**
          * Sets the operator selecttion box
