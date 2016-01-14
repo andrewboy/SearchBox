@@ -134,7 +134,7 @@ var SearchItem = function (context, id, params) {
      * @returns {String}
      */
     this.getType = function() {
-        return JSON.parse( JSON.stringify( params.type ) );
+        return params.type;
     };
 
     /**
