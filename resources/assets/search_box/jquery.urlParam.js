@@ -17,7 +17,7 @@
     $.getParams = function () {
         var params = Object.create(null),
             i,
-            searchParams = document.location.search.substr(1),
+            searchParams = document.location.search.substr(1).replace(/\+/g, '%20'),
             arrSearchParams,
             param,
             realIdx,

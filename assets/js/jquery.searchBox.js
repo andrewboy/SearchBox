@@ -132,8 +132,12 @@
             return id;
         };
         
+        /**
+         * Get the type of the SearchItem
+         * @returns {String}
+         */
         this.getType = function() {
-            return JSON.parse( JSON.stringify( params.type ) );
+            return params.type;
         };
     
         /**
@@ -601,7 +605,7 @@
     $.getParams = function () {
         var params = Object.create(null),
             i,
-            searchParams = document.location.search.substr(1),
+            searchParams = document.location.search.substr(1).replace(/\+/g, '%20'),
             arrSearchParams,
             param,
             realIdx,
