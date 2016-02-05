@@ -1,5 +1,9 @@
 <?php namespace Andrewboy\SearchBox\Traits;
 
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+
 trait SearchTrait
 {
 
@@ -255,7 +259,7 @@ trait SearchTrait
      * @param array $extended
      * @return array
      */
-    public static function getSearchSet($url, array $extended = [])
+    public static function getSearchSet($url, array $extended = [], $options = [])
     {
         $searchParams = [];
 
@@ -294,6 +298,15 @@ trait SearchTrait
                         $searchParams[$id] = $validSearchItem;
                     }
                 }
+            }
+        }
+
+        if (array_key_exists('is_cached', $options) && true === $options['is_cached']) {
+            if (session()->has('searchbox.' .$url) && !Input::has('search')) {
+                header('Location: '. $url .'?'. http_build_query(['search' => session()->get('searchbox.'. $url)]));
+                die;
+            } else {
+                session()->put('searchbox.'. $url, Input::get('search'));
             }
         }
 

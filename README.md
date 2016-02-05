@@ -262,3 +262,13 @@ Operators: true (!!1), false (!!0)
 Operators: equals (=), not equals (!=)
 
 write down how to publish the parts of the code etc.
+
+##Options
+
+The "getSearchSet" method 3rd parameter is the options parameter. The type of the parameter is array.
+
+###Caching
+
+```bash
+'is_caching'    =>  true
+```
