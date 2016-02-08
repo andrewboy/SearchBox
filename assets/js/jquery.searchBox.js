@@ -1,7 +1,6 @@
 ;
 (function ($) {
     "use strict";
-
     /*global $*/
     /**
      * Handles search item mechanizm in search box plugin
@@ -132,12 +131,12 @@
         this.getId = function () {
             return id;
         };
-        
+    
         /**
          * Get the type of the SearchItem
          * @returns {String}
          */
-        this.getType = function() {
+        this.getType = function () {
             return params.type;
         };
     
@@ -192,6 +191,16 @@
             } else {
                 getNode('checkBox').iCheck('uncheck');
             }
+            
+            context.itemActivationChange(obj);
+        };
+        
+        /**
+         * Returns the activation
+         * @returns {Boolean}
+         */
+        this.isActive = function () {
+            return getNode('checkBox').is(':checked');
         };
     
         init();
@@ -257,7 +266,7 @@
                         '</button>' +
                         '</div>';
     
-            } else if(params.type === 'boolean') {
+            } else if (params.type === 'boolean') {
                 xhtml += '<div class="form-group col-md-4">' +
                         '<input type="hidden" value="1" name="search[' + id + '][values][]" />' +
                         '</div>';
@@ -343,10 +352,10 @@
         'list': ["=", "!="]
     };
     
-
     /*global $*/
     /*global SearchItem*/
     /*global window*/
+    /*global Cookies*/
     /**
      * Searchbox mechanizm
      * @param {Object} el The jQuery node reference
@@ -360,8 +369,8 @@
             obj = this,
             settings = $.extend({
                 isJSON: false,
-                itemBeforeInit: function(){},
-                itemAfterInit: function(item){}
+                itemBeforeInit: function () {},
+                itemAfterInit: function (item) {}
             }, opts || {}),
             items = [],
     
@@ -471,10 +480,10 @@
                         items[i].destroy();
                     }
                 }
-    			
-    			if (settings.options.is_cached) {
-    				Cookies.set('searchbox_is_cleared', '1');
-    			}
+    
+                if (settings.options.is_cached) {
+                    Cookies.set('searchbox_is_cleared', '1');
+                }
             },
     
             /**
@@ -487,7 +496,7 @@
                     var input = JSON.parse(window.searchBoxParams);
                     settings.params = input.params;
                     settings.url = input.url;
-    				settings.options = input.options;
+                    settings.options = input.options;
                     settings.itemOperators = input.operators;
                     settings.itemLabels = input.fieldLabels;
                 }
@@ -518,14 +527,14 @@
         this.removeItem = function (id) {
             delete items[id];
             getNode('searchItemSelector').children('[value="' + id + '"]').attr('disabled', false);
-    		
-    		if (settings.options.is_cached) {
-    			if (items.length > 0) {
-    				Cookies.remove('searchbox_is_cleared');
-    			} else {
-    				Cookies.set('searchbox_is_cleared', '1');
-    			}
-    		}
+    
+            if (settings.options.is_cached) {
+                if (items.length > 0) {
+                    Cookies.remove('searchbox_is_cleared');
+                } else {
+                    Cookies.set('searchbox_is_cleared', '1');
+                }
+            }
         };
     
         /**
@@ -554,9 +563,33 @@
             getNode('body').append(item.getElement());
             items[item.getId()] = item;
             getNode('searchItemSelector').children('[value="' + item.getId() + '"]').attr('disabled', true);
-    		Cookies.remove('searchbox_is_cleared');
+            Cookies.remove('searchbox_is_cleared');
         };
     
+        /**
+         * Triggered, when item activation is changed
+         * @param {type} item
+         * @returns {undefined}
+         */
+        this.itemActivationChange = function (item) {
+            if (settings.options.is_cached) {
+                var i;
+                var isAllInactive = true;
+    
+                for (i in items) {
+                    if (items.hasOwnProperty(i) && !items[i].isActive()) {
+                        isAllInactive = false;
+                        break;
+                    }
+                }
+    
+                if (isAllInactive) {
+                    Cookies.set('searchbox_is_cleared', '1');
+                } else {
+                    Cookies.remove('searchbox_is_cleared');
+                }
+            }
+        };
     
         init();
     };
@@ -602,7 +635,6 @@
     };
 
 })(jQuery);
-
 /*jslint indent: 4, maxerr: 500, vars: true, regexp: true, sloppy: true */
 /*global document*/
 /*global decodeURI*/

@@ -128,12 +128,12 @@ var SearchItem = function (context, id, params) {
     this.getId = function () {
         return id;
     };
-    
+
     /**
      * Get the type of the SearchItem
      * @returns {String}
      */
-    this.getType = function() {
+    this.getType = function () {
         return params.type;
     };
 
@@ -188,6 +188,16 @@ var SearchItem = function (context, id, params) {
         } else {
             getNode('checkBox').iCheck('uncheck');
         }
+        
+        context.itemActivationChange(obj);
+    };
+    
+    /**
+     * Returns the activation
+     * @returns {Boolean}
+     */
+    this.isActive = function () {
+        return getNode('checkBox').is(':checked');
     };
 
     init();
@@ -253,7 +263,7 @@ SearchItem.getTemplate = function (item, params) {
                     '</button>' +
                     '</div>';
 
-        } else if(params.type === 'boolean') {
+        } else if (params.type === 'boolean') {
             xhtml += '<div class="form-group col-md-4">' +
                     '<input type="hidden" value="1" name="search[' + id + '][values][]" />' +
                     '</div>';
