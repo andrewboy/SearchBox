@@ -100,6 +100,9 @@
                 getNode('checkBox').iCheck('destroy').iCheck({
                     checkboxClass: 'icheckbox_square',
                     radioClass: 'iradio_square'
+                })
+                .on('ifToggled', function (e) {
+                    context.itemActivationChange(obj);
                 });
                 getNode('listToggleBtn').on('click', toggleBtnHandler);
                 getNode('operatorSelect').on('change', operatorHandler);
@@ -191,8 +194,6 @@
             } else {
                 getNode('checkBox').iCheck('uncheck');
             }
-            
-            context.itemActivationChange(obj);
         };
         
         /**
