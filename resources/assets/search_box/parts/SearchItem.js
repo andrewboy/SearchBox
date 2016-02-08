@@ -32,7 +32,7 @@ var SearchItem = function (context, id, params) {
                 return $('.list-toggle', $el);
 
             case 'checkBox':
-                return $('input.icheck', $el);
+                return $('input.searchbox-icheck', $el);
             }
         },
 
@@ -331,7 +331,7 @@ SearchItem.getTemplate = function (item, params) {
      */
     tpl.checkboxLayout = function (id) {
         return '<div class="form-group col-md-1 text-center">' +
-                '<input type="checkbox" class="icheck" name="search[' + id + '][active]" value="1" />' +
+                '<input type="checkbox" class="searchbox-icheck" name="search[' + id + '][active]" value="1" />' +
                 '</div>';
     };
 

@@ -35,7 +35,7 @@
                     return $('.list-toggle', $el);
     
                 case 'checkBox':
-                    return $('input.icheck', $el);
+                    return $('input.searchbox-icheck', $el);
                 }
             },
     
@@ -334,7 +334,7 @@
          */
         tpl.checkboxLayout = function (id) {
             return '<div class="form-group col-md-1 text-center">' +
-                    '<input type="checkbox" class="icheck" name="search[' + id + '][active]" value="1" />' +
+                    '<input type="checkbox" class="searchbox-icheck" name="search[' + id + '][active]" value="1" />' +
                     '</div>';
         };
     
@@ -577,7 +577,7 @@
                 var isAllInactive = true;
     
                 for (i in items) {
-                    if (items.hasOwnProperty(i) && !items[i].isActive()) {
+                    if (items.hasOwnProperty(i) && items[i].isActive()) {
                         isAllInactive = false;
                         break;
                     }

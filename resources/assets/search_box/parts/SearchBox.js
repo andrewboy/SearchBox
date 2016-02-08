@@ -223,7 +223,7 @@ var SearchBox = function (el, opts) {
             var isAllInactive = true;
 
             for (i in items) {
-                if (items.hasOwnProperty(i) && !items[i].isActive()) {
+                if (items.hasOwnProperty(i) && items[i].isActive()) {
                     isAllInactive = false;
                     break;
                 }

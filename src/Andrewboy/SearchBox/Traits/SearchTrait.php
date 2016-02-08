@@ -17,7 +17,8 @@ trait SearchTrait
 
             foreach ($params['search'] as $id => $values) {
                 if (false !== $id
-                    && in_array($id, array_keys(static::$searchParams)) && self::isValidSearchParam($values)) {
+                    && in_array($id, array_keys(static::$searchParams))
+                    && self::isValidSearchParam($values)) {
                     switch (static::$searchParams[$id]['type']) {
                         case 'integer':
                             $this->setIntegerSearchQuery($query, $id, $values);
@@ -64,7 +65,7 @@ trait SearchTrait
     {
         $arrValues = $values['values'];
         $operator = $values['operator'];
-        
+
         switch ($values['operator']) {
             case '=':
             case '>=':
@@ -108,7 +109,7 @@ trait SearchTrait
     protected function setDateSearchQuery($query, $key, array $values)
     {
         $arrValues = $values['values'];
-        
+
         switch ($values['operator']) {
             case '=':
                 if (isset(static::$searchParams[$key]['relation'])) {
@@ -165,7 +166,7 @@ trait SearchTrait
     protected function setStringSearchQuery($query, $key, array $values)
     {
         $value = $values['values'][0];
-        
+
         switch ($values['operator']) {
             case '~':
                 if (isset(static::$searchParams[$key]['relation'])) {
@@ -206,7 +207,7 @@ trait SearchTrait
     protected function setBooleanSearchQuery($query, $key, array $values)
     {
         $opertor = $values['operator'];
-        
+
         if (isset(static::$searchParams[$key]['relation'])) {
             $relationKey = static::$searchParams[$key]['relation'][1];
             $query->whereHas(
@@ -264,8 +265,9 @@ trait SearchTrait
         #SET DEFAULT SETTINGS FROM THE MODEL
         foreach (static::$searchParams as $id => $searchParam) {
             $searchParams[$id] = $searchParam;
-            if ('list' === $searchParam['type'] && array_key_exists('relation', $searchParam)
-            && is_array($searchParam['relation'])) {
+            if ('list' === $searchParam['type']
+                && array_key_exists('relation', $searchParam)
+                && is_array($searchParam['relation'])) {
                 $self = new self;
                 $relationClass = get_class(
                     $self->{$searchParam['relation'][0]}()->getRelated()
@@ -284,39 +286,39 @@ trait SearchTrait
                     }
                 } else {
                     if (array_key_exists('type', $searchItem)
-                    && is_string($searchItem['type'])
-                    && strlen($searchItem['type']) > 0) {
+                        && is_string($searchItem['type'])
+                        && strlen($searchItem['type']) > 0) {
                         $validSearchItem = [];
                         $validSearchItem['type'] = $searchItem['type'];
-                        
+
                         if (array_key_exists('values', $searchItem)) {
                             $validSearchItem['values'] = $searchItem['values'];
                         }
-                        
+
                         $searchParams[$id] = $validSearchItem;
                     }
                 }
             }
         }
 
-		$isCleaned = filter_input(INPUT_COOKIE, 'searchbox_is_cleared', FILTER_VALIDATE_BOOLEAN);
-		
+        $isCleaned = filter_input(INPUT_COOKIE, 'searchbox_is_cleared', FILTER_VALIDATE_BOOLEAN);
+
         if (array_key_exists('is_cached', $options) && true === $options['is_cached']) {
-            if (session()->has('searchbox.' .$url) && !Input::has('search') && true !== $isCleaned) {
-                header('Location: '. $url .'?'. http_build_query(['search' => session()->get('searchbox.'. $url)]));
+            if (session()->has('searchbox.' . $url) && !Input::has('search') && true !== $isCleaned) {
+                header('Location: ' . $url . '?' . http_build_query(['search' => session()->get('searchbox.' . $url)]));
                 die;
             } else {
-				if (true === $isCleaned) {
-					unset($_COOKIE['searchbox_is_cleared']);
-					setcookie('searchbox_is_cleared', null, -3600, '/');
-					session()->forget('searchbox.'. $url);
-				} else {
-					if (Input::has('search')) {
-						session()->put('searchbox.'. $url, Input::get('search'));
-					} else {
-						session()->forget('searchbox.'. $url);
-					}
-				}
+                if (true === $isCleaned) {
+                    unset($_COOKIE['searchbox_is_cleared']);
+                    setcookie('searchbox_is_cleared', null, -3600, '/');
+                    session()->forget('searchbox.' . $url);
+                } else {
+                    if (Input::has('search')) {
+                        session()->put('searchbox.' . $url, Input::get('search'));
+                    } else {
+                        session()->forget('searchbox.' . $url);
+                    }
+                }
             }
         }
 
@@ -326,8 +328,9 @@ trait SearchTrait
                 'params' => $searchParams,
                 'operators' => trans('search-box::operators'),
                 'fieldLabels' => is_array(trans('search-box::field_names.' . __CLASS__))
-                    ? trans('search-box::field_names.' . __CLASS__) : [],
-				'options'	=>	$options
+                    ? trans('search-box::field_names.' . __CLASS__)
+                    : [],
+                'options' => $options
             ]
         );
     }
@@ -339,11 +342,7 @@ trait SearchTrait
      */
     public static function isValidSearchParam(array $param)
     {
-        return is_array($param)
-            && array_key_exists('operator', $param)
-            && array_key_exists('values', $param)
-            && is_array($param['values'])
-            && (array_key_exists('active', $param)
-            && (bool) $param['active']);
+        return is_array($param) && array_key_exists('operator', $param) && array_key_exists('values', $param)
+            && is_array($param['values']) && (array_key_exists('active', $param) && (bool) $param['active']);
     }
 }
