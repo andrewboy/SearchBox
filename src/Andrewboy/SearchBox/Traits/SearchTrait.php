@@ -1,8 +1,6 @@
 <?php namespace Andrewboy\SearchBox\Traits;
 
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
 
 trait SearchTrait
 {
@@ -301,12 +299,24 @@ trait SearchTrait
             }
         }
 
+		$isCleaned = filter_input(INPUT_COOKIE, 'searchbox_is_cleared', FILTER_VALIDATE_BOOLEAN);
+		
         if (array_key_exists('is_cached', $options) && true === $options['is_cached']) {
-            if (session()->has('searchbox.' .$url) && !Input::has('search')) {
+            if (session()->has('searchbox.' .$url) && !Input::has('search') && true !== $isCleaned) {
                 header('Location: '. $url .'?'. http_build_query(['search' => session()->get('searchbox.'. $url)]));
                 die;
             } else {
-                session()->put('searchbox.'. $url, Input::get('search'));
+				if (true === $isCleaned) {
+					unset($_COOKIE['searchbox_is_cleared']);
+					setcookie('searchbox_is_cleared', null, -3600, '/');
+					session()->forget('searchbox.'. $url);
+				} else {
+					if (Input::has('search')) {
+						session()->put('searchbox.'. $url, Input::get('search'));
+					} else {
+						session()->forget('searchbox.'. $url);
+					}
+				}
             }
         }
 
@@ -316,7 +326,8 @@ trait SearchTrait
                 'params' => $searchParams,
                 'operators' => trans('search-box::operators'),
                 'fieldLabels' => is_array(trans('search-box::field_names.' . __CLASS__))
-                    ? trans('search-box::field_names.' . __CLASS__) : []
+                    ? trans('search-box::field_names.' . __CLASS__) : [],
+				'options'	=>	$options
             ]
         );
     }

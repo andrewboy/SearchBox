@@ -125,6 +125,10 @@ var SearchBox = function (el, opts) {
                     items[i].destroy();
                 }
             }
+			
+			if (settings.options.is_cached) {
+				Cookies.set('searchbox_is_cleared', '1');
+			}
         },
 
         /**
@@ -137,6 +141,7 @@ var SearchBox = function (el, opts) {
                 var input = JSON.parse(window.searchBoxParams);
                 settings.params = input.params;
                 settings.url = input.url;
+				settings.options = input.options;
                 settings.itemOperators = input.operators;
                 settings.itemLabels = input.fieldLabels;
             }
@@ -167,6 +172,14 @@ var SearchBox = function (el, opts) {
     this.removeItem = function (id) {
         delete items[id];
         getNode('searchItemSelector').children('[value="' + id + '"]').attr('disabled', false);
+		
+		if (settings.options.is_cached) {
+			if (items.length > 0) {
+				Cookies.remove('searchbox_is_cleared');
+			} else {
+				Cookies.set('searchbox_is_cleared', '1');
+			}
+		}
     };
 
     /**
@@ -195,6 +208,7 @@ var SearchBox = function (el, opts) {
         getNode('body').append(item.getElement());
         items[item.getId()] = item;
         getNode('searchItemSelector').children('[value="' + item.getId() + '"]').attr('disabled', true);
+		Cookies.remove('searchbox_is_cleared');
     };
 
 

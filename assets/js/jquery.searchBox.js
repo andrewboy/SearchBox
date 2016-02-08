@@ -1,6 +1,7 @@
 ;
 (function ($) {
     "use strict";
+
     /*global $*/
     /**
      * Handles search item mechanizm in search box plugin
@@ -342,6 +343,7 @@
         'list': ["=", "!="]
     };
     
+
     /*global $*/
     /*global SearchItem*/
     /*global window*/
@@ -469,6 +471,10 @@
                         items[i].destroy();
                     }
                 }
+    			
+    			if (settings.options.is_cached) {
+    				Cookies.set('searchbox_is_cleared', '1');
+    			}
             },
     
             /**
@@ -481,6 +487,7 @@
                     var input = JSON.parse(window.searchBoxParams);
                     settings.params = input.params;
                     settings.url = input.url;
+    				settings.options = input.options;
                     settings.itemOperators = input.operators;
                     settings.itemLabels = input.fieldLabels;
                 }
@@ -511,6 +518,14 @@
         this.removeItem = function (id) {
             delete items[id];
             getNode('searchItemSelector').children('[value="' + id + '"]').attr('disabled', false);
+    		
+    		if (settings.options.is_cached) {
+    			if (items.length > 0) {
+    				Cookies.remove('searchbox_is_cleared');
+    			} else {
+    				Cookies.set('searchbox_is_cleared', '1');
+    			}
+    		}
         };
     
         /**
@@ -539,6 +554,7 @@
             getNode('body').append(item.getElement());
             items[item.getId()] = item;
             getNode('searchItemSelector').children('[value="' + item.getId() + '"]').attr('disabled', true);
+    		Cookies.remove('searchbox_is_cleared');
         };
     
     
@@ -586,6 +602,7 @@
     };
 
 })(jQuery);
+
 /*jslint indent: 4, maxerr: 500, vars: true, regexp: true, sloppy: true */
 /*global document*/
 /*global decodeURI*/
