@@ -223,8 +223,8 @@ trait SearchTrait
 
     /**
      * Process LIST type of search
-     * @param type $query
-     * @param type $key
+     * @param string $query
+     * @param string $key
      * @param array $values
      */
     protected function setListSearchQuery($query, $key, array $values)
@@ -232,22 +232,32 @@ trait SearchTrait
         switch ($values['operator']) {
             case '=':
                 $ids = $values['values'];
-                $query->whereHas(
-                    static::$searchParams[$key]['relation'][0],
-                    function ($q) use ($ids) {
-                        $q->whereIn('id', $ids);
-                    }
-                );
+
+                if (array_key_exists('relation', static::$searchParams[$key])) {
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($ids) {
+                            $q->whereIn('id', $ids);
+                        }
+                    );
+                } else {
+                    $query->whereIn($key, $ids);
+                }
                 break;
 
             case '!=':
                 $ids = $values['values'];
-                $query->whereHas(
-                    static::$searchParams[$key]['relation'][0],
-                    function ($q) use ($ids) {
-                        $q->whereNotIn('id', $ids);
-                    }
-                );
+
+                if (array_key_exists('relation', static::$searchParams[$key])) {
+                    $query->whereHas(
+                        static::$searchParams[$key]['relation'][0],
+                        function ($q) use ($ids) {
+                            $q->whereNotIn('id', $ids);
+                        }
+                    );
+                } else {
+                    $query->whereIn($key, $ids);
+                }
                 break;
         }
     }
