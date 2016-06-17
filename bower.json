@@ -1,0 +1,8 @@
+{
+  "name": "search-box",
+  "dependencies": {
+    "AdminLTE": "admin-lte#~2.3.0",
+    "font-awesome": "fontawesome#~4.4.0",
+    "js-cookie": "~2.1.0"
+  }
+}
