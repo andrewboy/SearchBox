@@ -696,7 +696,7 @@
 
                 if (param[0].search(/\[(.*?)\]/g) > -1) {
                     if (undefined === params[realIdx]) {
-                        params[realIdx] = [];
+                        params[realIdx] = {};
                     }
                     setParam(params[realIdx], param[0].match(/\[(.*?)\]/g), decodeURIComponent(param[1]));
                 } else {
