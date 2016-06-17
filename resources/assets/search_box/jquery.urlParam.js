@@ -28,7 +28,9 @@
 
                 cleanedParam = realParam.match(/\[(.*?)\]/)[1];
 
-                if (undefined === params[cleanedParam]) {
+                if ('[]' === realParam) {
+                    params = [];
+                } else if (undefined === params[cleanedParam]) {
                     params[cleanedParam] = {};
                 }
 
@@ -36,7 +38,7 @@
                     setParam(params[cleanedParam], paramIndexes, value);
                 } else {
 
-                    if (realParam === '[]') {
+                    if ('[]' === realParam) {
                         params.push(value);
                     } else {
                         params[cleanedParam] = value;
