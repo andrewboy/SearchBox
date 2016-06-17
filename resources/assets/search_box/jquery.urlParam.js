@@ -29,7 +29,7 @@
                 cleanedParam = realParam.match(/\[(.*?)\]/)[1];
 
                 if (undefined === params[cleanedParam]) {
-                    params[cleanedParam] = [];
+                    params[cleanedParam] = {};
                 }
 
                 if (paramIndexes.length > 0) {
