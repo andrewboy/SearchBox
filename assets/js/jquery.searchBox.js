@@ -666,18 +666,23 @@
 
                 cleanedParam = realParam.match(/\[(.*?)\]/)[1];
 
-                if ('[]' === realParam) {
-                    params = [];
-                } else if (undefined === params[cleanedParam]) {
-                    params[cleanedParam] = {};
+                if (undefined === params[cleanedParam]) {
+                    if ('[]' === paramIndexes[0]) {
+                        params[cleanedParam] = [];
+                    } else {
+                        params[cleanedParam] = {};
+                    }
+                }
+
+                if ('[]' === paramIndexes[0]) {
+                    realParam = paramIndexes.shift();
                 }
 
                 if (paramIndexes.length > 0) {
                     setParam(params[cleanedParam], paramIndexes, value);
                 } else {
-
                     if ('[]' === realParam) {
-                        params.push(value);
+                        params[cleanedParam].push(value);
                     } else {
                         params[cleanedParam] = value;
                     }
